@@ -111,7 +111,7 @@ function move(part, color, positionR) {
                 }
                     newPosition = [actualPosition[0], actualPosition[1] + 1]
                     if(isOccupied(changeCords(newPosition))){
-                        console.log("Casilla bloqueada")
+                        break
                     } else {
                         Board[i].position = changeCords(newPosition)
                         return changeCords(newPosition)
@@ -129,7 +129,7 @@ function move(part, color, positionR) {
                 }
                     let newPosition = [actualPosition[0], actualPosition[1] - 1]
                     if(isOccupied(changeCords(newPosition))){
-                        console.log("Casilla bloqueada")
+                        break
                     } else {
                         Board[i].position = changeCords(newPosition)
                         return changeCords(newPosition)
@@ -148,43 +148,59 @@ function move(part, color, positionR) {
 
             if(position[0] == actualPosition[0] && position[1] == actualPosition[1]) {
 
-                if(Board[i].color === "white" && color === "white") {
-
                     //POSICIONES VERTICALES
-                    for (let j = actualPosition[1]; j <= 8; j++) {
-                        newPosition = [actualPosition[0], actualPosition[1] + 1]
+                    for (let j = actualPosition[1] + 1; j < 8; j++) {
+                        newPosition = [actualPosition[0], j]
 
                         if(isOccupied(changeCords(newPosition))){
-
+                            break
                         } else {
-                            return changeCords(newPosition)
+                            console.log(changeCords(newPosition))
                         }
                         
                     }
 
-                    //POSICIONES HORIZONTALES
-                    for (let j = actualPosition[1]; j <= 8; j++) {
-                        newPosition = [actualPosition[0], actualPosition[1] + 1]
+                    //VERTICAL ABAJO
+                    for (let j = actualPosition[1] - 1; j >= 0; j--) {
+                        newPosition = [actualPosition[0], j]
 
                         if(isOccupied(changeCords(newPosition))){
-                            console.log("Casilla bloqueada")
-
+                            break
                         } else {
-                            return changeCords(newPosition)
+                            console.log(changeCords(newPosition))
                         }
                         
                     }
 
-                    Board[i].position = changeCords(newPosition)
-                }
+                    //POSICIONES HORIZONTALES DERECHA
+                    for (let j = actualPosition[0] + 1; j < 8; j++) {
+                        newPosition = [j, actualPosition[1]]
 
-                if(Board[i].color === "black" && color === "black") {
-            
+                        if(isOccupied(changeCords(newPosition))){
+                            break
+                        } else {
+                            console.log(changeCords(newPosition))
+                        }
+                        
+                    }
+
+                    ///POSICIONES HORIZONTALES IZQUIERDA
+                    for (let j = actualPosition[0] - 1; j >= 0; j--) {
+                        newPosition = [j, actualPosition[1]]
+
+                        if(isOccupied(changeCords(newPosition))){
+                            break
+                        } else {
+                            console.log(changeCords(newPosition))
+                        }
+                        
+                    }
                 }
             }
         }
+        return ""
     }
-}
+
 
 console.log(move("pawn", "white", ["A", 2]))
 console.log(Board[0])
@@ -194,4 +210,5 @@ console.log(move("pawn", "black", ["A", 7]))
 console.log(Board[8])
 console.log(move("pawn", "white", ["A", 4]))
 console.log(move("pawn", "white", ["A", 5]))
+console.log(move("rook", "white", ["A", 1]))
 
