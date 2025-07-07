@@ -59,7 +59,14 @@ var Board = [
 
 let letters = ["A", "B", "C", "D", "E", "F", "G", "H"]
 
-
+function isOccupied(position) {
+  for (let i = 0; i < Board.length; i++) {
+    if (Board[i].position[0] === position[0] && Board[i].position[1] === position[1]) {
+      return true;
+    }
+  }
+  return false;
+}
 
 function cords(position) {
     let letcol = position[0]
@@ -79,13 +86,16 @@ function changeCords(position) {
 
 function move(part, color, positionR) {
     let newPosition2
+    let position
+    let actualPosition
+    let newPosition
 
     //PAWNS
     if (part === "pawn") {
 
         for (let i = 0; i < Board.length; i++) {
-            let actualPosition = cords(Board[i].position)
-            let position = cords(positionR)
+            actualPosition = cords(Board[i].position)
+            position = cords(positionR)
             
             if(position[0] == actualPosition[0] && position[1] == actualPosition[1]) {
 
@@ -93,21 +103,38 @@ function move(part, color, positionR) {
 
                     if (position[1] == 1) {
                     newPosition2 = [actualPosition[0], actualPosition[1] + 2]
-                    console.log(changeCords(newPosition2))
+                    if (isOccupied(changeCords(newPosition2))) {
+
+                        } else {
+                              console.log(changeCords(newPosition2))
+                        }
                 }
-                    let newPosition = [actualPosition[0], actualPosition[1] + 1]
-                    Board[i].position = changeCords(newPosition)
-                    return changeCords(newPosition)
+                    newPosition = [actualPosition[0], actualPosition[1] + 1]
+                    if(isOccupied(changeCords(newPosition))){
+                        console.log("Casilla bloqueada")
+                    } else {
+                        Board[i].position = changeCords(newPosition)
+                        return changeCords(newPosition)
+                    }
                 }
 
                 if(Board[i].color === "black" && color === "black") {
                     if (position[1] == 7) {
                     newPosition2 = [actualPosition[0], actualPosition[1] - 2]
-                    console.log(changeCords(newPosition2))
+                        if (isOccupied(changeCords(newPosition2))) {
+
+                        } else {
+                              console.log(changeCords(newPosition2))
+                        }
                 }
                     let newPosition = [actualPosition[0], actualPosition[1] - 1]
-                    Board[i].position = changeCords(newPosition)
-                    return changeCords(newPosition)
+                    if(isOccupied(changeCords(newPosition))){
+                        console.log("Casilla bloqueada")
+                    } else {
+                        Board[i].position = changeCords(newPosition)
+                        return changeCords(newPosition)
+                    }
+                    
                 }
             }
         }
@@ -115,7 +142,47 @@ function move(part, color, positionR) {
 
     //ROOK
     if(part === "rook") {
+        for (let i = 0; i < Board.length; i++) {
+            actualPosition = cords(Board[i].position)
+            position = cords(positionR)
 
+            if(position[0] == actualPosition[0] && position[1] == actualPosition[1]) {
+
+                if(Board[i].color === "white" && color === "white") {
+
+                    //POSICIONES VERTICALES
+                    for (let j = actualPosition[1]; j <= 8; j++) {
+                        newPosition = [actualPosition[0], actualPosition[1] + 1]
+
+                        if(isOccupied(changeCords(newPosition))){
+
+                        } else {
+                            return changeCords(newPosition)
+                        }
+                        
+                    }
+
+                    //POSICIONES HORIZONTALES
+                    for (let j = actualPosition[1]; j <= 8; j++) {
+                        newPosition = [actualPosition[0], actualPosition[1] + 1]
+
+                        if(isOccupied(changeCords(newPosition))){
+                            console.log("Casilla bloqueada")
+
+                        } else {
+                            return changeCords(newPosition)
+                        }
+                        
+                    }
+
+                    Board[i].position = changeCords(newPosition)
+                }
+
+                if(Board[i].color === "black" && color === "black") {
+            
+                }
+            }
+        }
     }
 }
 
@@ -125,3 +192,6 @@ console.log(move("pawn", "white", ["A", 3]))
 console.log(Board[0])
 console.log(move("pawn", "black", ["A", 7]))
 console.log(Board[8])
+console.log(move("pawn", "white", ["A", 4]))
+console.log(move("pawn", "white", ["A", 5]))
+
