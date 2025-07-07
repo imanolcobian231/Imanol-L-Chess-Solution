@@ -59,6 +59,8 @@ var Board = [
 
 let letters = ["A", "B", "C", "D", "E", "F", "G", "H"]
 
+
+
 function cords(position) {
     let letcol = position[0]
     let letnum = position[1]
@@ -67,5 +69,59 @@ function cords(position) {
     return [col, fil]
 }
 
+function changeCords(position) {
+    let letCol = position[0];    
+    let letnum = position[1];       
+    let col = letters[letCol];
+    let num = letnum + 1;
+    return [col, num];
+}
 
-console.log(cords(Board[0].position))
+function move(part, color, positionR) {
+    let newPosition2
+
+    //PAWNS
+    if (part === "pawn") {
+
+        for (let i = 0; i < Board.length; i++) {
+            let actualPosition = cords(Board[i].position)
+            let position = cords(positionR)
+            
+            if(position[0] == actualPosition[0] && position[1] == actualPosition[1]) {
+
+                if(Board[i].color === "white" && color === "white") {
+
+                    if (position[1] == 1) {
+                    newPosition2 = [actualPosition[0], actualPosition[1] + 2]
+                    console.log(changeCords(newPosition2))
+                }
+                    let newPosition = [actualPosition[0], actualPosition[1] + 1]
+                    Board[i].position = changeCords(newPosition)
+                    return changeCords(newPosition)
+                }
+
+                if(Board[i].color === "black" && color === "black") {
+                    if (position[1] == 7) {
+                    newPosition2 = [actualPosition[0], actualPosition[1] - 2]
+                    console.log(changeCords(newPosition2))
+                }
+                    let newPosition = [actualPosition[0], actualPosition[1] - 1]
+                    Board[i].position = changeCords(newPosition)
+                    return changeCords(newPosition)
+                }
+            }
+        }
+    }
+
+    //ROOK
+    if(part === "rook") {
+
+    }
+}
+
+console.log(move("pawn", "white", ["A", 2]))
+console.log(Board[0])
+console.log(move("pawn", "white", ["A", 3]))
+console.log(Board[0])
+console.log(move("pawn", "black", ["A", 7]))
+console.log(Board[8])
