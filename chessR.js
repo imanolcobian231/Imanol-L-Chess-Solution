@@ -121,7 +121,7 @@ function move(part, color, positionR) {
                         Board[i].position = changeCords(newPosition)
                         movesPawn.push(changeCords(newPosition))
                     }
-                    console.log("Moves", movesPawn)
+                    console.log("Moves Pawn", movesPawn)
                 }
 
                 if(Board[i].color === "black" && color === "black") {
@@ -140,7 +140,7 @@ function move(part, color, positionR) {
                         Board[i].position = changeCords(newPosition)
                         movesPawn.push(changeCords(newPosition))
                     }
-                    console.log("Moves", movesPawn)
+                    console.log("Moves Pawn", movesPawn)
                     
                 }
             }
@@ -205,7 +205,7 @@ function move(part, color, positionR) {
                     }
                 }
             }
-            console.log("Moves", movesRook)
+            console.log("Moves Rook", movesRook)
         }
 
         if(part === "knight") {
@@ -256,7 +256,7 @@ function move(part, color, positionR) {
             
 
         }
-        console.log("Moves", movesKnight)
+        console.log("Moves Knight", movesKnight)
     }
 
     if(part === "bishop") {
@@ -304,7 +304,7 @@ function move(part, color, positionR) {
                 }
             }
         }
-         console.log("Moves", movesBishop)
+         console.log("Moves Bishop", movesBishop)
     }
     
     if(part === "queen") {
@@ -356,7 +356,6 @@ function move(part, color, positionR) {
                         newPosition = [actualPosition[0], j]
 
                         if(insideBoard(newPosition) && isOccupied(changeCords(newPosition))){
-                            console.log(true)
                             break
                         } else {
                             movesQueen.push((changeCords(newPosition)))
@@ -403,6 +402,51 @@ function move(part, color, positionR) {
         
         console.log("Moves Queen", movesQueen)
     }
+
+    if(part === "king") {
+        let movesKing = []
+
+        for (let i = 0; i < Board.length; i++) {
+            actualPosition = cords(Board[i].position)
+            position = cords(positionR)
+            if(position[0] == actualPosition[0] && position[1] == actualPosition[1]) {
+                    let position1 = [position[0] - 1, position[1]]
+                    let position2 = [position[0] + 1, position[1]]
+                    let position3 = [position[0], position[1] + 1]
+                    let position4 = [position[0] - 1, position[1] + 1]
+                    let position5 = [position[0] - 1, position[1] - 1]
+                    let position6 = [position[0] + 1, position[1] - 1]
+                    let position7 = [position[0] + 1, position[1] + 1]
+                    let position8 = [position[0], position[1] - 1]
+
+                    if (insideBoard(position1) && !isOccupied(changeCords(position1))) {
+                        movesKing.push(changeCords(position1))
+                    } 
+                     if (insideBoard(position2) && !isOccupied(changeCords(position2))) {
+                        movesKing.push(changeCords(position2))
+                    }
+                     if (insideBoard(position3) && !isOccupied(changeCords(position3))) {
+                        movesKing.push(changeCords(position3))
+                    }
+                    if (insideBoard(position4) && !isOccupied(changeCords(position4))) {
+                        movesKing.push(changeCords(position4))
+                    }
+                    if (insideBoard(position5) && !isOccupied(changeCords(position5))) {
+                        movesKing.push(changeCords(position5))
+                    }
+                     if (insideBoard(position6) && !isOccupied(changeCords(position6))) {
+                        movesKing.push(changeCords(position6))
+                    }
+                     if (insideBoard(position7) && !isOccupied(changeCords(position7))) {
+                        movesKing.push(changeCords(position7))
+                    }
+                     if (insideBoard(position8) && !isOccupied(changeCords(position8))) {
+                        movesKing.push(changeCords(position8))
+                    }
+            }
+        }
+        console.log("Moves King", movesKing)
+    }
     return ""
 }
 
@@ -415,3 +459,4 @@ console.log(move("bishop", "white", ["C", 1]))
 console.log(move("pawn", "white", ["D", 2]))
 console.log(move("pawn", "white", ["C", 2]))
 console.log(move("queen", "white", ["D", 1]))
+console.log(move("king", "white", ["E", 1]))
