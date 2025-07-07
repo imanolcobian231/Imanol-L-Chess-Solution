@@ -85,9 +85,7 @@ function cords(position) {
 function changeCords(position) {
     let letCol = position[0];    
     let letnum = position[1];       
-    let col = letters[letCol];
-    let num = letnum + 1;
-    return [col, num];
+    return [letters[letCol], letnum + 1]
 }
 
 function move(part, color, positionR) {
@@ -260,10 +258,59 @@ function move(part, color, positionR) {
         }
         console.log("Moves", movesKnight)
     }
+
+    if(part === "bishop") {
+        let movesBishop = []
+
+        for (let i = 1; i < Board.length; i++) {
+            actualPosition = cords(Board[i].position)
+            position = cords(positionR)
+            if(position[0] == actualPosition[0] && position[1] == actualPosition[1]) {
+                for (let j = 0; j < 8; j++) {
+                    newPosition = [actualPosition[0] + j, actualPosition[1] + j]
+                    if(isOccupied(changeCords(newPosition))){
+                        break
+                    } else if(insideBoard(newPosition)){
+                        movesBishop.push((changeCords(newPosition)))
+                    }  
+                }
+
+                for (let j = 1; j < 8; j++) {
+                    newPosition = [actualPosition[0] - j, actualPosition[1] + j]
+                    if(isOccupied(changeCords(newPosition))){
+                        break
+                    } else if(insideBoard(newPosition)){
+                        movesBishop.push((changeCords(newPosition)))
+                    }  
+                }
+
+                for (let j = 1; j < 8; j++) {
+                    newPosition = [actualPosition[0] + j, actualPosition[1] - j]
+                    if(isOccupied(changeCords(newPosition))){
+                        break
+                    } else if(insideBoard(newPosition)){
+                        movesBishop.push((changeCords(newPosition)))
+                    }  
+                }
+
+                for (let j = 1; j < 8; j++) {
+                    newPosition = [actualPosition[0] - j, actualPosition[1] - j]
+                    if(isOccupied(changeCords(newPosition))){
+                        break
+                    } else if(insideBoard(newPosition)){
+                        movesBishop.push((changeCords(newPosition)))
+                    }  
+                }
+            }
+        }
+         console.log("Moves", movesBishop)
+    }       
     return ""
 }
 
 console.log(move("pawn", "white", ["A", 2]))
 console.log(move("pawn", "white", ["A", 3]))
+console.log(move("pawn", "white", ["B", 2]))
 console.log(move("rook", "white", ["A", 1]))
 console.log(move("knight", "black", ["B", 8]))
+console.log(move("bishop", "white", ["C", 1]))
