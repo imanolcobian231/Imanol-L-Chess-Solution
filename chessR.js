@@ -262,10 +262,11 @@ function move(part, color, positionR) {
     if(part === "bishop") {
         let movesBishop = []
 
-        for (let i = 1; i < Board.length; i++) {
+        for (let i = 0; i < Board.length; i++) {
             actualPosition = cords(Board[i].position)
             position = cords(positionR)
             if(position[0] == actualPosition[0] && position[1] == actualPosition[1]) {
+                
                 for (let j = 0; j < 8; j++) {
                     newPosition = [actualPosition[0] + j, actualPosition[1] + j]
                     if(isOccupied(changeCords(newPosition))){
@@ -304,7 +305,104 @@ function move(part, color, positionR) {
             }
         }
          console.log("Moves", movesBishop)
-    }       
+    }
+    
+    if(part === "queen") {
+         let movesQueen = []
+
+        for (let i = 0; i < Board.length; i++) {
+            actualPosition = cords(Board[i].position)
+            position = cords(positionR)
+            if(position[0] == actualPosition[0] && position[1] == actualPosition[1]) {
+               
+                for (let j = 0; j < 8; j++) {
+                    newPosition = [actualPosition[0] + j, actualPosition[1] + j]
+                    if(isOccupied(changeCords(newPosition))){
+                        break
+                    } else if(insideBoard(newPosition)){
+                        movesQueen.push((changeCords(newPosition)))
+                    }  
+                }
+
+                for (let j = 1; j < 8; j++) {
+                    newPosition = [actualPosition[0] - j, actualPosition[1] + j]
+                    if(isOccupied(changeCords(newPosition))){
+                        break
+                    } else if(insideBoard(newPosition)){
+                        movesQueen.push((changeCords(newPosition)))
+                    }  
+                }
+
+                for (let j = 1; j < 8; j++) {
+                    newPosition = [actualPosition[0] + j, actualPosition[1] - j]
+                    if(isOccupied(changeCords(newPosition))){
+                        break
+                    } else if(insideBoard(newPosition)){
+                        movesQueen.push((changeCords(newPosition)))
+                    }  
+                }
+
+                for (let j = 1; j < 8; j++) {
+                    newPosition = [actualPosition[0] - j, actualPosition[1] - j]
+                    if(isOccupied(changeCords(newPosition))){
+                        break
+                    } else if(insideBoard(newPosition)){
+                        movesQueen.push((changeCords(newPosition)))
+                    }  
+                }
+
+                     //POSICIONES VERTICALES
+                    for (let j = actualPosition[1] + 1; j < 8; j++) {
+                        newPosition = [actualPosition[0], j]
+
+                        if(insideBoard(newPosition) && isOccupied(changeCords(newPosition))){
+                            console.log(true)
+                            break
+                        } else {
+                            movesQueen.push((changeCords(newPosition)))
+                        }
+                        
+                    }
+
+                    //VERTICAL ABAJO
+                    for (let j = actualPosition[1] - 1; j >= 0; j--) {
+                        newPosition = [actualPosition[0], j]
+
+                        if(isOccupied(changeCords(newPosition))){
+                            break
+                        } else {
+                            movesQueen.push((changeCords(newPosition)))
+                        }
+                        
+                    }
+
+                    //POSICIONES HORIZONTALES DERECHA
+                    for (let j = actualPosition[0] + 1; j < 8; j++) {
+                        newPosition = [j, actualPosition[1]]
+
+                        if(isOccupied(changeCords(newPosition))){
+                            break
+                        } else {
+                            movesQueen.push((changeCords(newPosition)))
+                        }
+                        
+                    }
+
+                    ///POSICIONES HORIZONTALES IZQUIERDA
+                    for (let j = actualPosition[0] - 1; j >= 0; j--) {
+                        newPosition = [j, actualPosition[1]]
+
+                        if(isOccupied(changeCords(newPosition))){
+                            break
+                        } else {
+                            movesQueen.push((changeCords(newPosition)))
+                        }                  
+              }
+            }
+        }  
+        
+        console.log("Moves Queen", movesQueen)
+    }
     return ""
 }
 
@@ -314,3 +412,6 @@ console.log(move("pawn", "white", ["B", 2]))
 console.log(move("rook", "white", ["A", 1]))
 console.log(move("knight", "black", ["B", 8]))
 console.log(move("bishop", "white", ["C", 1]))
+console.log(move("pawn", "white", ["D", 2]))
+console.log(move("pawn", "white", ["C", 2]))
+console.log(move("queen", "white", ["D", 1]))
