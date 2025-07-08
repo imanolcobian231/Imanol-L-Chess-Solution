@@ -140,42 +140,94 @@ function knightMoves(position) {
     let knightPosibleMoves = [];
 
     if(Board[position]) {
+
         actualPosition = cords(position);
-        let position1 = [actualPosition[0] + 2, actualPosition[1] + 1]
-        let position2 = [actualPosition[0] + 1, actualPosition[1] + 2]
-        let position3 = [actualPosition[0] - 1, actualPosition[1] + 2]
-        let position4 = [actualPosition[0] - 2, actualPosition[1] + 1]
-        let position5 = [actualPosition[0] - 2, actualPosition[1] - 1]
-        let position6 = [actualPosition[0] - 1, actualPosition[1] - 2]
-        let position7 = [actualPosition[0] + 1, actualPosition[1] - 2]
-        let position8 = [actualPosition[0] + 2, actualPosition[1] - 1]
+        let position1 = [actualPosition[0] + 2, actualPosition[1] + 1];
+        let position2 = [actualPosition[0] + 1, actualPosition[1] + 2];
+        let position3 = [actualPosition[0] - 1, actualPosition[1] + 2];
+        let position4 = [actualPosition[0] - 2, actualPosition[1] + 1];
+        let position5 = [actualPosition[0] - 2, actualPosition[1] - 1];
+        let position6 = [actualPosition[0] - 1, actualPosition[1] - 2];
+        let position7 = [actualPosition[0] + 1, actualPosition[1] - 2];
+        let position8 = [actualPosition[0] + 2, actualPosition[1] - 1];
 
         if (insideBoard(position1)) {
-            knightPosibleMoves.push(changeCords(position1))
+            knightPosibleMoves.push(changeCords(position1));
         }
         if (insideBoard(position2)) {
-            knightPosibleMoves.push(changeCords(position2))
+            knightPosibleMoves.push(changeCords(position2));
         }
         if (insideBoard(position3)) {
-            knightPosibleMoves.push(changeCords(position3))
+            knightPosibleMoves.push(changeCords(position3));
         }
         if (insideBoard(position4)) {
-            knightPosibleMoves.push(changeCords(position4))
+            knightPosibleMoves.push(changeCords(position4));
         }
         if (insideBoard(position5)) {
-            knightPosibleMoves.push(changeCords(position5))
+            knightPosibleMoves.push(changeCords(position5));
         }
         if (insideBoard(position6)) {
-            knightPosibleMoves.push(changeCords(position6))
+            knightPosibleMoves.push(changeCords(position6));
         }
         if (insideBoard(position7)) {
-            knightPosibleMoves.push(changeCords(position7))
+            knightPosibleMoves.push(changeCords(position7));
         }
         if (insideBoard(position8)) {
-            knightPosibleMoves.push(changeCords(position8))
+            knightPosibleMoves.push(changeCords(position8));
         }
     }
-    return knightPosibleMoves
+    return knightPosibleMoves;
+}
+
+function bishopMoves(position) {
+    let actualPosition;
+    let newPosition;
+    let bishopPosibleMoves = [];
+
+    if(Board[position]) {
+        actualPosition = cords(position);
+
+        for (let i = 1; i < 8; i++) {
+            newPosition = [actualPosition[0] + i, actualPosition[1] + i]
+            if(isOccupied(changeCords(newPosition))){
+                break
+            } else if(insideBoard(newPosition)){
+                bishopPosibleMoves.push((changeCords(newPosition)))
+            }  
+        }
+
+        for (let i = 1; i < 8; i++) {
+            newPosition = [actualPosition[0] - i, actualPosition[1] + i]
+            if(isOccupied(changeCords(newPosition))){
+                break
+            } else if(insideBoard(newPosition)){
+                bishopPosibleMoves.push((changeCords(newPosition)))
+            }  
+        }
+
+        for (let i = 1; i < 8; i++) {
+            newPosition = [actualPosition[0] + i, actualPosition[1] - i]
+            if(isOccupied(changeCords(newPosition))){
+                break
+            } else if(insideBoard(newPosition)){
+                bishopPosibleMoves.push((changeCords(newPosition)))
+            }  
+        }
+
+        for (let i = 1; i < 8; i++) {
+            newPosition = [actualPosition[0] - i, actualPosition[1] - i]
+            if(isOccupied(changeCords(newPosition))){
+                break
+            } else if(insideBoard(newPosition)){
+                bishopPosibleMoves.push((changeCords(newPosition)))
+            }  
+        }
+    }
+    return bishopPosibleMoves
+}
+
+function kingMoves(position) {
+    
 }
 
 
