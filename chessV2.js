@@ -227,9 +227,80 @@ function bishopMoves(position) {
 }
 
 function kingMoves(position) {
-    
+    let actualPosition;
+    let newPosition;
+    let kingPosibleMoves = [];
+
+    if(Board[position]) {
+
+        actualPosition = cords(position);
+        let position1 = [actualPosition[0] - 1, actualPosition[1]]
+        let position2 = [actualPosition[0] + 1, actualPosition[1]]
+        let position3 = [actualPosition[0], actualPosition[1] + 1]
+        let position4 = [actualPosition[0] - 1, actualPosition[1] + 1]
+        let position5 = [actualPosition[0] - 1, actualPosition[1] - 1]
+        let position6 = [actualPosition[0] + 1, actualPosition[1] - 1]
+        let position7 = [actualPosition[0] + 1, actualPosition[1] + 1]
+        let position8 = [actualPosition[0], actualPosition[1] - 1]
+
+        if (insideBoard(position1) && !isOccupied(changeCords(position1))) {
+            kingPosibleMoves.push(changeCords(position1))
+        } 
+        if (insideBoard(position2) && !isOccupied(changeCords(position2))) {
+            kingPosibleMoves.push(changeCords(position2))
+        }
+        if (insideBoard(position3) && !isOccupied(changeCords(position3))) {
+            kingPosibleMoves.push(changeCords(position3))
+        }
+        if (insideBoard(position4) && !isOccupied(changeCords(position4))) {
+            kingPosibleMoves.push(changeCords(position4))
+        }
+        if (insideBoard(position5) && !isOccupied(changeCords(position5))) {
+            kingPosibleMoves.push(changeCords(position5))
+        }
+        if (insideBoard(position6) && !isOccupied(changeCords(position6))) {
+            kingPosibleMoves.push(changeCords(position6))
+        }
+        if (insideBoard(position7) && !isOccupied(changeCords(position7))) {
+            kingPosibleMoves.push(changeCords(position7))
+        }
+        if (insideBoard(position8) && !isOccupied(changeCords(position8))) {
+            kingPosibleMoves.push(changeCords(position8))
+        }
+    }
+    return kingPosibleMoves
 }
 
+function move(part, position, color) {
+    if(part === "pawn") {
+        console.log(pawnsMoves(position))
+    }
 
+    if(part === "rook") {
+        console.log(rookMoves(position))
+    }
+
+    if(part === "knight") {
+        console.log(knightMoves(position))
+    }
+
+    if(part === "bishop") {
+        console.log(bishopMoves(position))
+    }
+
+    if(part === "queen") {
+        let queenPosibleMoves = []
+        queenPosibleMoves.push(rookMoves(position))
+        queenPosibleMoves.push(bishopMoves(position))
+        console.log(queenPosibleMoves)
+    }
+
+    if(part === "king") {
+        console.log(kingMoves(position))
+    }
+return ""
+}
+
+console.log(move("pawn", "A2", "white"))
 
 
