@@ -180,7 +180,7 @@ function move(part, color, positionR) {
                         if(isOccupied(changeCords(newPosition))){
                             break
                         } else {
-                            movesRook.push((changeCords(newPosition)))
+                            movesRook.push(changeCords(newPosition))
                         }
                         
                     }

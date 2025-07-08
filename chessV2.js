@@ -40,8 +40,7 @@ Board["E1"] = { part: "king", color: "white" };
 Board["E8"] = { part: "king", color: "black" };
 
 function isOccupied(position) {
-    let pos = position[0] + position[1];
-    return Board[pos] != undefined;
+    return Board[position] != undefined;
 }
 
 function insideBoard(position) {
@@ -86,15 +85,99 @@ function pawnsMoves(position) {
 function rookMoves(position) {
     let actualPosition;
     let newPosition;
+    let rookPosibleMoves = [];
 
     if(Board[position]) {
         actualPosition = cords(position);
-        for (let i = 0; i < 7; i++) {
-            
+
+        //Movimiento vertical arriba
+        for (let i = actualPosition[1] + 1; i < 8; i++) {
+            newPosition = [actualPosition[0], i];
+            if (isOccupied(changeCords(newPosition))) {
+                break;
+            } else {
+                rookPosibleMoves.push(changeCords(newPosition));
+            }
+        }
+
+        //Movimiento vertical abajo
+        for (let i = actualPosition[1] - 1;i >= 0; i--) {
+            newPosition = [actualPosition[0], i];
+            if (isOccupied(changeCords(newPosition))) {
+                break;
+            } else {
+                rookPosibleMoves.push(changeCords(newPosition));
+            }
+        }
+
+        //Movimiento horizontal derecha
+        for (let i = actualPosition[0] + 1;i < 8; i++) {
+            newPosition = [i, actualPosition[1]];
+            if (isOccupied(changeCords(newPosition))) {
+                break;
+            } else {
+                rookPosibleMoves.push(changeCords(newPosition));
+            }
+        }
+
+        //Movimiento horizontal izquierda
+        for (let i = actualPosition[0] - 1;i >= 0; i--) {
+            newPosition = [i, actualPosition[1]];
+            if (isOccupied(changeCords(newPosition))) {
+                break;
+            } else {
+                rookPosibleMoves.push(changeCords(newPosition));
+            }
         }
     }
    
+    return rookPosibleMoves;
  
 }
+
+function knightMoves(position) {
+    let actualPosition;
+    let knightPosibleMoves = [];
+
+    if(Board[position]) {
+        actualPosition = cords(position);
+        let position1 = [actualPosition[0] + 2, actualPosition[1] + 1]
+        let position2 = [actualPosition[0] + 1, actualPosition[1] + 2]
+        let position3 = [actualPosition[0] - 1, actualPosition[1] + 2]
+        let position4 = [actualPosition[0] - 2, actualPosition[1] + 1]
+        let position5 = [actualPosition[0] - 2, actualPosition[1] - 1]
+        let position6 = [actualPosition[0] - 1, actualPosition[1] - 2]
+        let position7 = [actualPosition[0] + 1, actualPosition[1] - 2]
+        let position8 = [actualPosition[0] + 2, actualPosition[1] - 1]
+
+        if (insideBoard(position1)) {
+            knightPosibleMoves.push(changeCords(position1))
+        }
+        if (insideBoard(position2)) {
+            knightPosibleMoves.push(changeCords(position2))
+        }
+        if (insideBoard(position3)) {
+            knightPosibleMoves.push(changeCords(position3))
+        }
+        if (insideBoard(position4)) {
+            knightPosibleMoves.push(changeCords(position4))
+        }
+        if (insideBoard(position5)) {
+            knightPosibleMoves.push(changeCords(position5))
+        }
+        if (insideBoard(position6)) {
+            knightPosibleMoves.push(changeCords(position6))
+        }
+        if (insideBoard(position7)) {
+            knightPosibleMoves.push(changeCords(position7))
+        }
+        if (insideBoard(position8)) {
+            knightPosibleMoves.push(changeCords(position8))
+        }
+    }
+    return knightPosibleMoves
+}
+
+
 
 
