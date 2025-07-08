@@ -112,7 +112,7 @@ function move(part, color, positionR) {
             position = cords(positionR)
             
             if(actualPosition[1] === 7) {
-                Board[i].part === "queen"
+                Board[i].part = "queen"
             }
 
             if(pawnEat(actualPosition)) {
