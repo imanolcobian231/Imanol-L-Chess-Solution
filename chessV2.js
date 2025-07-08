@@ -1,4 +1,4 @@
-const Board = {};
+let Board = {};
 
 // WHITE PAWNS
 for (let i = 0; i < 8; i++) {
@@ -50,5 +50,5 @@ function insideBoard(position) {
 }
 
 function pawnEat(position) {
-    
+
 }
