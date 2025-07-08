@@ -88,6 +88,15 @@ function changeCords(position) {
     return [letters[letCol], letnum + 1]
 }
 
+function pawnEat(position) {
+    for (let i = 0; i < Board.length; i++) {
+    if (Board[i].position[0] === position[0] + 1 && Board[i].position[1] === position[1] + 1 || Board[i].position[0] === position[0] - 1 && Board[i].position[1] === position[1] + 1) {
+      return true;
+    }
+  }
+  return false;
+}
+
 function move(part, color, positionR) {
     let newPosition2
     let position
@@ -102,6 +111,14 @@ function move(part, color, positionR) {
             actualPosition = cords(Board[i].position)
             position = cords(positionR)
             
+            if(actualPosition[1] === 7) {
+                Board[i].part === "queen"
+            }
+
+            if(pawnEat(actualPosition)) {
+                movesPawn.push("Si hay piezas para comer")
+            }
+
             if(position[0] == actualPosition[0] && position[1] == actualPosition[1]) {
 
                 if(Board[i].color === "white" && color === "white") {
@@ -315,6 +332,7 @@ function move(part, color, positionR) {
             position = cords(positionR)
             if(position[0] == actualPosition[0] && position[1] == actualPosition[1]) {
                
+                //Movimientos de la reina, combinando alfil y torre
                 for (let j = 0; j < 8; j++) {
                     newPosition = [actualPosition[0] + j, actualPosition[1] + j]
                     if(isOccupied(changeCords(newPosition))){
@@ -403,6 +421,7 @@ function move(part, color, positionR) {
         console.log("Moves Queen", movesQueen)
     }
 
+    //King
     if(part === "king") {
         let movesKing = []
 
@@ -410,6 +429,8 @@ function move(part, color, positionR) {
             actualPosition = cords(Board[i].position)
             position = cords(positionR)
             if(position[0] == actualPosition[0] && position[1] == actualPosition[1]) {
+
+                    //Movimientos
                     let position1 = [position[0] - 1, position[1]]
                     let position2 = [position[0] + 1, position[1]]
                     let position3 = [position[0], position[1] + 1]
@@ -419,6 +440,7 @@ function move(part, color, positionR) {
                     let position7 = [position[0] + 1, position[1] + 1]
                     let position8 = [position[0], position[1] - 1]
 
+                    //Validacion si los lugares no estan ocupados
                     if (insideBoard(position1) && !isOccupied(changeCords(position1))) {
                         movesKing.push(changeCords(position1))
                     } 
@@ -460,3 +482,4 @@ console.log(move("pawn", "white", ["D", 2]))
 console.log(move("pawn", "white", ["C", 2]))
 console.log(move("queen", "white", ["D", 1]))
 console.log(move("king", "white", ["E", 1]))
+
