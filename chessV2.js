@@ -4,7 +4,7 @@ let letters = ["A","B","C","D","E","F","G","H"];
 for (let i = 0; i < letters.length; i++) {
     let lett = letters[i]
     Board[lett] = {}
-    for (let num = 0; num <= 8; num++) {
+    for (let num = 1; num <= 8; num++) {
         Board[lett][num] = null
     }
     
@@ -67,6 +67,8 @@ function pawnEat(position) {
 }
 
 function movePart(position, newPosition) {
+    Board[newPosition[0]][newPosition[1]] = Board[position[0]][position[1]]
+    Board[position[0]][position[1]] = null
 }
 
 function pawnsMoves(position) {
@@ -79,6 +81,7 @@ function pawnsMoves(position) {
         newPosition = [actualPosition[0], actualPosition[1] + 1];
         if (!isOccupied(changeCords(newPosition))) {
             pawnsPosibleMoves.push(changeCords(newPosition));
+            movePart(changeCords(actualPosition), changeCords(newPosition))
         } 
 
         if (position[1] == 2){
@@ -310,3 +313,13 @@ return ""
 }
 
 console.log(move("pawn", ["A", 2], "white"))
+console.log(Board["A"])
+console.log(move("pawn", ["A", 3], "white"))
+console.log(Board["A"])
+console.log(move("pawn", ["A", 4], "white"))
+console.log(Board["A"])
+console.log(move("pawn", ["A", 5], "white"))
+console.log(Board["A"])
+console.log(move("pawn", ["A", 6], "white"))
+console.log(Board["A"])
+
