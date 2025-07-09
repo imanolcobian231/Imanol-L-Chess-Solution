@@ -99,7 +99,7 @@ function rookMoves(position) {
     let newPosition;
     let rookPosibleMoves = [];
 
-    if(Board[position]) {
+    if(Board[position[0]][position[1]]) {
         actualPosition = cords(position);
 
         //Movimiento vertical arriba
@@ -284,11 +284,11 @@ function kingMoves(position) {
 
 function move(part, position, color) {
     if(part === "pawn") {
-        console.log(pawnsMoves(position));
+        console.log("PAWN MOVES", pawnsMoves(position));
     }
 
     if(part === "rook") {
-        console.log(rookMoves(position));
+        console.log("ROOK MOVES", rookMoves(position));
     }
 
     if(part === "knight") {
@@ -313,13 +313,8 @@ return ""
 }
 
 console.log(move("pawn", ["A", 2], "white"))
-console.log(Board["A"])
 console.log(move("pawn", ["A", 3], "white"))
-console.log(Board["A"])
 console.log(move("pawn", ["A", 4], "white"))
-console.log(Board["A"])
 console.log(move("pawn", ["A", 5], "white"))
-console.log(Board["A"])
-console.log(move("pawn", ["A", 6], "white"))
-console.log(Board["A"])
+console.log(move("rook", ["A", 1], "white"))
 
