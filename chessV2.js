@@ -1,43 +1,50 @@
 let Board = {};
 let letters = ["A","B","C","D","E","F","G","H"];
 
+for (let i = 0; i < letters.length; i++) {
+    let lett = letters[i]
+    Board[lett] = {}
+    for (let num = 0; num <= 8; num++) {
+        Board[lett][num] = null
+    }
+    
+}
+
 // WHITE PAWNS
 for (let i = 0; i < 8; i++) {
-  const file = String.fromCharCode(65 + i); // A-H
-  Board[file + "2"] = { part: "pawn", color: "white" };
+  Board[letters[i]][2] = { part: "pawn", color: "white" };
 }
 
 // BLACK PAWNS
 for (let i = 0; i < 8; i++) {
-  const file = String.fromCharCode(65 + i);
-  Board[file + "7"] = { part: "pawn", color: "black" };
+  Board[letters[i]][7] = { part: "pawn", color: "black" };
 }
 
 // ROOKS
-Board["A1"] = { part: "rook", color: "white" };
-Board["H1"] = { part: "rook", color: "white" };
-Board["A8"] = { part: "rook", color: "black" };
-Board["H8"] = { part: "rook", color: "black" };
+Board["A"][1] = { part: "rook", color: "white" };
+Board["H"][1] = { part: "rook", color: "white" };
+Board["A"][8] = { part: "rook", color: "black" };
+Board["H"][8] = { part: "rook", color: "black" };
 
 // KNIGHTS
-Board["B1"] = { part: "knight", color: "white" };
-Board["G1"] = { part: "knight", color: "white" };
-Board["B8"] = { part: "knight", color: "black" };
-Board["G8"] = { part: "knight", color: "black" };
+Board["B"][1] = { part: "knight", color: "white" };
+Board["G"][1] = { part: "knight", color: "white" };
+Board["B"][8] = { part: "knight", color: "black" };
+Board["G"][8] = { part: "knight", color: "black" };
 
 //BISHOPS
-Board["C1"] = { part: "bishop", color: "white" };
-Board["F1"] = { part: "bishop", color: "white" };
-Board["C8"] = { part: "bishop", color: "black" };
-Board["F8"] = { part: "bishop", color: "black" };
+Board["C"][1] = { part: "bishop", color: "white" };
+Board["F"][1] = { part: "bishop", color: "white" };
+Board["C"][8] = { part: "bishop", color: "black" };
+Board["F"][8] = { part: "bishop", color: "black" };
 
 // QUEENS
-Board["D1"] = { part: "queen", color: "white" };
-Board["D8"] = { part: "queen", color: "black" };
+Board["D"][1] = { part: "queen", color: "white" };
+Board["D"][8] = { part: "queen", color: "black" };
 
 // KINGS
-Board["E1"] = { part: "king", color: "white" };
-Board["E8"] = { part: "king", color: "black" };
+Board["E"][1] = { part: "king", color: "white" };
+Board["E"][8] = { part: "king", color: "black" };
 
 function isOccupied(position) {
     return Board[position] != undefined;
@@ -60,6 +67,9 @@ function pawnEat(position) {
 
 }
 
+function movePart(position, newPosition) {
+}
+
 function pawnsMoves(position) {
     let actualPosition;
     let newPosition;
@@ -76,6 +86,7 @@ function pawnsMoves(position) {
             let especialPosition = [actualPosition[0], actualPosition[1] + 2];
             pawnsPosibleMoves.push(changeCords(especialPosition));
         }
+        movePart(changeCords(newPosition),changeCords(actualPosition))
         return pawnsPosibleMoves;
     }
 }
@@ -190,119 +201,119 @@ function bishopMoves(position) {
         for (let i = 1; i < 8; i++) {
             newPosition = [actualPosition[0] + i, actualPosition[1] + i]
             if(isOccupied(changeCords(newPosition))){
-                break
+                break;
             } else if(insideBoard(newPosition)){
-                bishopPosibleMoves.push((changeCords(newPosition)))
+                bishopPosibleMoves.push((changeCords(newPosition)));
             }  
         }
 
         for (let i = 1; i < 8; i++) {
-            newPosition = [actualPosition[0] - i, actualPosition[1] + i]
+            newPosition = [actualPosition[0] - i, actualPosition[1] + i];
             if(isOccupied(changeCords(newPosition))){
-                break
+                break;
             } else if(insideBoard(newPosition)){
-                bishopPosibleMoves.push((changeCords(newPosition)))
+                bishopPosibleMoves.push((changeCords(newPosition)));
             }  
         }
 
         for (let i = 1; i < 8; i++) {
-            newPosition = [actualPosition[0] + i, actualPosition[1] - i]
+            newPosition = [actualPosition[0] + i, actualPosition[1] - i];
             if(isOccupied(changeCords(newPosition))){
-                break
+                break;
             } else if(insideBoard(newPosition)){
-                bishopPosibleMoves.push((changeCords(newPosition)))
+                bishopPosibleMoves.push((changeCords(newPosition)));
             }  
         }
 
         for (let i = 1; i < 8; i++) {
-            newPosition = [actualPosition[0] - i, actualPosition[1] - i]
+            newPosition = [actualPosition[0] - i, actualPosition[1] - i];
             if(isOccupied(changeCords(newPosition))){
-                break
+                break;
             } else if(insideBoard(newPosition)){
-                bishopPosibleMoves.push((changeCords(newPosition)))
+                bishopPosibleMoves.push((changeCords(newPosition)));
             }  
         }
     }
-    return bishopPosibleMoves
+    return bishopPosibleMoves;
 }
 
 function kingMoves(position) {
     let actualPosition;
-    let newPosition;
     let kingPosibleMoves = [];
 
     if(Board[position]) {
 
         actualPosition = cords(position);
-        let position1 = [actualPosition[0] - 1, actualPosition[1]]
-        let position2 = [actualPosition[0] + 1, actualPosition[1]]
-        let position3 = [actualPosition[0], actualPosition[1] + 1]
-        let position4 = [actualPosition[0] - 1, actualPosition[1] + 1]
-        let position5 = [actualPosition[0] - 1, actualPosition[1] - 1]
-        let position6 = [actualPosition[0] + 1, actualPosition[1] - 1]
-        let position7 = [actualPosition[0] + 1, actualPosition[1] + 1]
-        let position8 = [actualPosition[0], actualPosition[1] - 1]
+        let position1 = [actualPosition[0] - 1, actualPosition[1]];
+        let position2 = [actualPosition[0] + 1, actualPosition[1]];
+        let position3 = [actualPosition[0], actualPosition[1] + 1];
+        let position4 = [actualPosition[0] - 1, actualPosition[1] + 1];
+        let position5 = [actualPosition[0] - 1, actualPosition[1] - 1];
+        let position6 = [actualPosition[0] + 1, actualPosition[1] - 1];
+        let position7 = [actualPosition[0] + 1, actualPosition[1] + 1];
+        let position8 = [actualPosition[0], actualPosition[1] - 1];
 
         if (insideBoard(position1) && !isOccupied(changeCords(position1))) {
-            kingPosibleMoves.push(changeCords(position1))
+            kingPosibleMoves.push(changeCords(position1));
         } 
         if (insideBoard(position2) && !isOccupied(changeCords(position2))) {
-            kingPosibleMoves.push(changeCords(position2))
+            kingPosibleMoves.push(changeCords(position2));
         }
         if (insideBoard(position3) && !isOccupied(changeCords(position3))) {
-            kingPosibleMoves.push(changeCords(position3))
+            kingPosibleMoves.push(changeCords(position3));
         }
         if (insideBoard(position4) && !isOccupied(changeCords(position4))) {
-            kingPosibleMoves.push(changeCords(position4))
+            kingPosibleMoves.push(changeCords(position4));
         }
         if (insideBoard(position5) && !isOccupied(changeCords(position5))) {
-            kingPosibleMoves.push(changeCords(position5))
+            kingPosibleMoves.push(changeCords(position5));
         }
         if (insideBoard(position6) && !isOccupied(changeCords(position6))) {
-            kingPosibleMoves.push(changeCords(position6))
+            kingPosibleMoves.push(changeCords(position6));
         }
         if (insideBoard(position7) && !isOccupied(changeCords(position7))) {
-            kingPosibleMoves.push(changeCords(position7))
+            kingPosibleMoves.push(changeCords(position7));
         }
         if (insideBoard(position8) && !isOccupied(changeCords(position8))) {
-            kingPosibleMoves.push(changeCords(position8))
+            kingPosibleMoves.push(changeCords(position8));
         }
     }
-    return kingPosibleMoves
+    return kingPosibleMoves;
 }
 
 function move(part, position, color) {
     if(part === "pawn") {
-        console.log(pawnsMoves(position))
+        console.log(pawnsMoves(position));
     }
 
     if(part === "rook") {
-        console.log(rookMoves(position))
+        console.log(rookMoves(position));
     }
 
     if(part === "knight") {
-        console.log(knightMoves(position))
+        console.log(knightMoves(position));
     }
 
     if(part === "bishop") {
-        console.log(bishopMoves(position))
+        console.log(bishopMoves(position));
     }
 
     if(part === "queen") {
         let queenPosibleMoves = []
-        queenPosibleMoves.push(rookMoves(position))
-        queenPosibleMoves.push(bishopMoves(position))
-        console.log(queenPosibleMoves)
+        queenPosibleMoves.push(rookMoves(position));
+        queenPosibleMoves.push(bishopMoves(position));
+        console.log(queenPosibleMoves);
     }
 
     if(part === "king") {
-        console.log(kingMoves(position))
+        console.log(kingMoves(position));
     }
 return ""
 }
 
-console.log(move("pawn", "A2", "white"))
-console.log(move("knight", "B1", "white"))
+console.log(Board)
+
+
 
 
 
