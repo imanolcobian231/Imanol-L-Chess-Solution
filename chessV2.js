@@ -151,7 +151,7 @@ function knightMoves(position) {
     let actualPosition;
     let knightPosibleMoves = [];
 
-    if(Board[position]) {
+    if(Board[position[0]][position[1]]) {
 
         actualPosition = cords(position);
         let position1 = [actualPosition[0] + 2, actualPosition[1] + 1];
@@ -196,43 +196,46 @@ function bishopMoves(position) {
     let newPosition;
     let bishopPosibleMoves = [];
 
-    if(Board[position]) {
+    if(Board[position[0]][position[1]]) {
         actualPosition = cords(position);
-
         for (let i = 1; i < 8; i++) {
-            newPosition = [actualPosition[0] + i, actualPosition[1] + i]
-            if(isOccupied(changeCords(newPosition))){
+            newPosition = [actualPosition[0] + i, actualPosition[1] + i];
+            if (!insideBoard(newPosition)) break;
+            if (isOccupied(changeCords(newPosition))) {
                 break;
-            } else if(insideBoard(newPosition)){
-                bishopPosibleMoves.push((changeCords(newPosition)));
-            }  
+            } else {
+                bishopPosibleMoves.push(changeCords(newPosition));
+            }
         }
 
         for (let i = 1; i < 8; i++) {
             newPosition = [actualPosition[0] - i, actualPosition[1] + i];
-            if(isOccupied(changeCords(newPosition))){
+            if (!insideBoard(newPosition)) break;
+            if (isOccupied(changeCords(newPosition))) {
                 break;
-            } else if(insideBoard(newPosition)){
-                bishopPosibleMoves.push((changeCords(newPosition)));
-            }  
+            } else {
+                bishopPosibleMoves.push(changeCords(newPosition));
+            }
         }
 
         for (let i = 1; i < 8; i++) {
             newPosition = [actualPosition[0] + i, actualPosition[1] - i];
-            if(isOccupied(changeCords(newPosition))){
+            if (!insideBoard(newPosition)) break;
+            if (isOccupied(changeCords(newPosition))) {
                 break;
-            } else if(insideBoard(newPosition)){
-                bishopPosibleMoves.push((changeCords(newPosition)));
-            }  
+            } else {
+                bishopPosibleMoves.push(changeCords(newPosition));
+            }
         }
 
         for (let i = 1; i < 8; i++) {
             newPosition = [actualPosition[0] - i, actualPosition[1] - i];
-            if(isOccupied(changeCords(newPosition))){
+            if (!insideBoard(newPosition)) break;
+            if (isOccupied(changeCords(newPosition))) {
                 break;
-            } else if(insideBoard(newPosition)){
-                bishopPosibleMoves.push((changeCords(newPosition)));
-            }  
+            } else {
+                bishopPosibleMoves.push(changeCords(newPosition));
+            }
         }
     }
     return bishopPosibleMoves;
@@ -242,7 +245,7 @@ function kingMoves(position) {
     let actualPosition;
     let kingPosibleMoves = [];
 
-    if(Board[position[0], position[1]]) {
+    if(Board[position[0]][position[1]]) {
 
         actualPosition = cords(position);
         let position1 = [actualPosition[0] - 1, actualPosition[1]];
@@ -292,22 +295,22 @@ function move(part, position, color) {
     }
 
     if(part === "knight") {
-        console.log(knightMoves(position));
+        console.log("KNIGHT MOVES", knightMoves(position));
     }
 
     if(part === "bishop") {
-        console.log(bishopMoves(position));
+        console.log("BISHOP MOVES", bishopMoves(position));
     }
 
     if(part === "queen") {
         let queenPosibleMoves = []
         queenPosibleMoves.push(rookMoves(position));
         queenPosibleMoves.push(bishopMoves(position));
-        console.log(queenPosibleMoves);
+        console.log("QUEEN MOVES", queenPosibleMoves);
     }
 
     if(part === "king") {
-        console.log(kingMoves(position));
+        console.log("KING MOVES", kingMoves(position));
     }
 return ""
 }
@@ -316,5 +319,16 @@ console.log(move("pawn", ["A", 2], "white"))
 console.log(move("pawn", ["A", 3], "white"))
 console.log(move("pawn", ["A", 4], "white"))
 console.log(move("pawn", ["A", 5], "white"))
+console.log(move("pawn", ["B", 2], "white"))
+console.log(move("pawn", ["E", 2], "white"))
+console.log(move("pawn", ["F", 2], "white"))
+console.log(move("pawn", ["D", 2], "white"))
 console.log(move("rook", ["A", 1], "white"))
+console.log(move("knight", ["B", 1], "white"))
+console.log(move("bishop", ["C", 1], "white"))
+console.log(move("king", ["E", 1], "white"))
+console.log(move("queen", ["D", 1], "white"))
+console.log(Board)
+
+
 
