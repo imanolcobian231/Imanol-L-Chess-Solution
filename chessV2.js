@@ -43,10 +43,10 @@ function isOccupied(position) {
     return Board[position] != undefined;
 }
 
-function insideBoard(position) {
-  let [col, row] = position;
-  return letters.includes(col) && row >= 1 && row <= 8;
+function insideBoard([x, y]) {
+  return x >= 0 && x < 8 && y >= 0 && y < 8;
 }
+
 
 function cords([letter, number]) {
   return [letters.indexOf(letter), number - 1];
@@ -302,5 +302,7 @@ return ""
 }
 
 console.log(move("pawn", "A2", "white"))
+console.log(move("knight", "B1", "white"))
+
 
 
