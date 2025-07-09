@@ -47,9 +47,8 @@ Board["E"][1] = { part: "king", color: "white" };
 Board["E"][8] = { part: "king", color: "black" };
 
 function isOccupied(position) {
-    return Board[position] != undefined;
+    return Board[position[0]][position[1]] != null;
 }
-
 function insideBoard([x, y]) {
   return x >= 0 && x < 8 && y >= 0 && y < 8;
 }
@@ -60,7 +59,7 @@ function cords([letter, number]) {
 }
 
 function changeCords([letter, number,]) {
-  return letters[letter] + (number + 1);
+  return [letters[letter], number + 1];
 }
 
 function pawnEat(position) {
@@ -75,10 +74,10 @@ function pawnsMoves(position) {
     let newPosition;
     let pawnsPosibleMoves = [];
 
-    if (Board[position]) {
+    if (Board[position[0]][position[1]]) {
         actualPosition = cords(position);
         newPosition = [actualPosition[0], actualPosition[1] + 1];
-        if (!isOccupied(newPosition)) {
+        if (!isOccupied(changeCords(newPosition))) {
             pawnsPosibleMoves.push(changeCords(newPosition));
         } 
 
@@ -86,9 +85,8 @@ function pawnsMoves(position) {
             let especialPosition = [actualPosition[0], actualPosition[1] + 2];
             pawnsPosibleMoves.push(changeCords(especialPosition));
         }
-        movePart(changeCords(newPosition),changeCords(actualPosition))
-        return pawnsPosibleMoves;
     }
+    return pawnsPosibleMoves;
 }
 
 
@@ -241,7 +239,7 @@ function kingMoves(position) {
     let actualPosition;
     let kingPosibleMoves = [];
 
-    if(Board[position]) {
+    if(Board[position[0], position[1]]) {
 
         actualPosition = cords(position);
         let position1 = [actualPosition[0] - 1, actualPosition[1]];
@@ -311,9 +309,4 @@ function move(part, position, color) {
 return ""
 }
 
-console.log(Board)
-
-
-
-
-
+console.log(move("pawn", ["A", 2], "white"))
