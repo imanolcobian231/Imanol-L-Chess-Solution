@@ -14,8 +14,6 @@ interface enemyBoard {
     position: position
 }
 
-
-
 type pieceType = "pawn" | "rook" | "knight" | "bishop" | "queen" | "king";
 type color = "white" | "black";
 type letter = "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H";
@@ -46,7 +44,7 @@ for (let i = 0; i < 8; i++) {
 }
 
 // ROOKS
-Board["A"][1] = { part: "rook", color: "white" };
+Board["C"][4] = { part: "rook", color: "white" };
 Board["H"][1] = { part: "rook", color: "white" };
 Board["A"][8] = { part: "rook", color: "black" };
 Board["H"][8] = { part: "rook", color: "black" };
@@ -148,6 +146,35 @@ function pawnsEat(position: position): Array<enemyBoard> {
     return enemy
 }
 
+function enemyDetector(position: position, actualPosition: position):Array<enemyBoard> {
+    let newPosition = cords(position[0], position[1])
+    let enemyPosition = changeCords(newPosition[0], newPosition[1])
+    let enemy = Board[enemyPosition[0]][enemyPosition[1]]as Piece
+    let isWhite
+    let isBlack
+    let blackEnemyPositions = []
+    let whiteEnemyPositions = []
+
+    if(Board[actualPosition[0]][actualPosition[1]]?.color === "white"){
+        isWhite = true
+    } else {
+        isBlack = true
+    }
+
+    if(enemy != null && enemy.color === "black" && isWhite ) {
+        thereIsEnemy = "FICHAS DISPONIBLES PARA COMER"
+        blackEnemyPositions.push({position: enemyPosition, piece: enemy })
+    } else if (enemy != null && enemy.color === "white" && isBlack ) {
+        thereIsEnemy = "FICHAS DISPONIBLES PARA COMER"
+        whiteEnemyPositions.push({position: enemyPosition, piece: enemy })
+    }
+    
+    if(isWhite) {
+        return blackEnemyPositions
+    } else {
+        return whiteEnemyPositions
+    } 
+}
 
 function pawnsMoves(position: position): string {
     thereIsEnemy = ""
@@ -192,15 +219,8 @@ function rookMoves(position: position) {
     let newPosition;
     let isWhite
     let isBlack
+    let rookEnemies = []
     let rookPosibleMoves = [];
-    let blackEnemyPositions = []
-    let whiteEnemyPositions = []
-
-    if(Board[position[0]][position[1]]?.color === "white"){
-        isWhite = true
-    } else {
-        isBlack = true
-    }
 
     if(Board[position[0]][position[1]]) {
         actualPosition = cords(position[0], position[1]);
@@ -209,19 +229,10 @@ function rookMoves(position: position) {
         for (let i = actualPosition[1] + 1; i < 8; i++) {
             newPosition = [actualPosition[0], i];
             if (isOccupied(changeCords(newPosition[0], newPosition[1]))) {
-                let enemyPosition = changeCords(newPosition[0], newPosition[1])
-                let enemy = Board[enemyPosition[0]][enemyPosition[1]]as Piece
-
-                if(enemy != null && enemy.color === "black" && isWhite ) {
-                    thereIsEnemy = "FICHAS DISPONIBLES PARA COMER"
-                    blackEnemyPositions.push({position: enemyPosition, piece: enemy })
-                } else if (enemy != null && enemy.color === "white" && isBlack ) {
-                    thereIsEnemy = "FICHAS DISPONIBLES PARA COMER"
-                    whiteEnemyPositions.push({position: enemyPosition, piece: enemy })
-                }
+                rookEnemies.push(enemyDetector(changeCords(newPosition[0], newPosition[1]),changeCords(actualPosition[0], actualPosition[1])))
                 break;
             } else {
-                rookPosibleMoves.push(changeCords(newPosition[0], newPosition[1]));
+                rookPosibleMoves.push(changeCords(newPosition[0], newPosition[1]),changeCords(actualPosition[0], actualPosition[1]));
             }
         }
 
@@ -229,16 +240,7 @@ function rookMoves(position: position) {
         for (let i = actualPosition[1] - 1;i >= 0; i--) {
             newPosition = [actualPosition[0], i];
             if (isOccupied(changeCords(newPosition[0], newPosition[1]))) {
-                let enemyPosition = changeCords(newPosition[0], newPosition[1])
-                let enemy = Board[enemyPosition[0]][enemyPosition[1]]as Piece
-
-                if(enemy != null && enemy.color === "black" && isWhite ) {
-                    thereIsEnemy = "FICHAS DISPONIBLES PARA COMER"
-                    blackEnemyPositions.push({position: enemyPosition, piece: enemy })
-                } else if (enemy != null && enemy.color === "white" && isBlack ) {
-                    thereIsEnemy = "FICHAS DISPONIBLES PARA COMER"
-                    whiteEnemyPositions.push({position: enemyPosition, piece: enemy })
-                }
+                rookEnemies.push(enemyDetector(changeCords(newPosition[0], newPosition[1]),changeCords(actualPosition[0], actualPosition[1])))
                 break;
             } else {
                 rookPosibleMoves.push(changeCords(newPosition[0], newPosition[1]));
@@ -249,16 +251,7 @@ function rookMoves(position: position) {
         for (let i = actualPosition[0] + 1;i < 8; i++) {
             newPosition = [i, actualPosition[1]];
             if (isOccupied(changeCords(newPosition[0], newPosition[1]))) {
-                let enemyPosition = changeCords(newPosition[0], newPosition[1])
-                let enemy = Board[enemyPosition[0]][enemyPosition[1]]as Piece
-
-                if(enemy != null && enemy.color === "black" && isWhite ) {
-                    thereIsEnemy = "FICHAS DISPONIBLES PARA COMER"
-                    blackEnemyPositions.push({position: enemyPosition, piece: enemy })
-                } else if (enemy != null && enemy.color === "white" && isBlack ) {
-                    thereIsEnemy = "FICHAS DISPONIBLES PARA COMER"
-                    whiteEnemyPositions.push({position: enemyPosition, piece: enemy })
-                }
+                rookEnemies.push(enemyDetector(changeCords(newPosition[0], newPosition[1]),changeCords(actualPosition[0], actualPosition[1])))
                 break;
             } else {
                 rookPosibleMoves.push(changeCords(newPosition[0], newPosition[1]));
@@ -269,16 +262,7 @@ function rookMoves(position: position) {
         for (let i = actualPosition[0] - 1;i >= 0; i--) {
             newPosition = [i, actualPosition[1]];
             if (isOccupied(changeCords(newPosition[0], newPosition[1]))) {
-                let enemyPosition = changeCords(newPosition[0], newPosition[1])
-                let enemy = Board[enemyPosition[0]][enemyPosition[1]]as Piece
-
-                if(enemy != null && enemy.color === "black" && isWhite ) {
-                    thereIsEnemy = "FICHAS DISPONIBLES PARA COMER"
-                    blackEnemyPositions.push({position: enemyPosition, piece: enemy })
-                } else if (enemy != null && enemy.color === "white" && isBlack ) {
-                    thereIsEnemy = "FICHAS DISPONIBLES PARA COMER"
-                    whiteEnemyPositions.push({position: enemyPosition, piece: enemy })
-                }
+                rookEnemies.push(enemyDetector(changeCords(newPosition[0], newPosition[1]),changeCords(actualPosition[0], actualPosition[1])))
                 break;
             } else {
                 rookPosibleMoves.push(changeCords(newPosition[0], newPosition[1]));
@@ -286,29 +270,18 @@ function rookMoves(position: position) {
         }
     }
    
+
     let rookPossibilities = []
-    if(isWhite) {
-        rookPossibilities = [...rookPosibleMoves, thereIsEnemy, ...blackEnemyPositions]    
-    } else {
-        rookPossibilities = [...rookPosibleMoves, thereIsEnemy, ...whiteEnemyPositions]
-    }
-    return rookPossibilities;
- 
+    rookPossibilities = [...rookPosibleMoves, thereIsEnemy, ...rookEnemies]
+    console.dir(rookPossibilities, {depth: null})
+    return ""
 }
 
 function knightMoves(position: position) {
     let actualPosition;
     let knightPosibleMoves = [];
-    let isWhite
-    let isBlack
-    let blackEnemyPositions = []
-    let whiteEnemyPositions = []
-    if(Board[position[0]][position[1]]?.color === "white"){
-        isWhite = true
-    } else {
-        isBlack = true
-    }
-
+    let knightEnemies = []
+    let knightPossibilities = []
     if(Board[position[0]][position[1]]) {
 
         actualPosition = cords(position[0], position[1]);
@@ -321,50 +294,59 @@ function knightMoves(position: position) {
         let position7 = [actualPosition[0] + 1, actualPosition[1] - 2];
         let position8 = [actualPosition[0] + 2, actualPosition[1] - 1];
 
-        if (insideBoard(position1[0], position1[1])) {
+        if (insideBoard(position1[0], position1[1]) && !isOccupied(changeCords(position1[0], position1[1]))) {
             knightPosibleMoves.push(changeCords(position1[0], position1[1]));
         } else if (isOccupied(changeCords(position1[0], position1[1]))) {
-
-                let enemyPosition = changeCords(position1[0], position1[1])
-                let enemy = Board[enemyPosition[0]][enemyPosition[1]]as Piece
-
-                if(enemy != null && enemy.color === "black" && isWhite ) {
-                    thereIsEnemy = "FICHAS DISPONIBLES PARA COMER"
-                    blackEnemyPositions.push({position: enemyPosition, piece: enemy })
-                } else if (enemy != null && enemy.color === "white" && isBlack ) {
-                    thereIsEnemy = "FICHAS DISPONIBLES PARA COMER"
-                    whiteEnemyPositions.push({position: enemyPosition, piece: enemy })
-                }
+            knightEnemies.push(enemyDetector(changeCords(position1[0], position1[1]),changeCords(actualPosition[0], actualPosition[1])))
         }
-        if (insideBoard(position2[0], position2[1])) {
+        if (insideBoard(position2[0], position2[1]) && !isOccupied(changeCords(position2[0], position2[1]))) {
             knightPosibleMoves.push(changeCords(position2[0], position2[1]));
+        } else if (isOccupied(changeCords(position2[0], position2[1]))) {
+            knightEnemies.push(enemyDetector(changeCords(position2[0], position2[1]),changeCords(actualPosition[0], actualPosition[1])))
         }
-        if (insideBoard(position3[0], position3[1])) {
+        if (insideBoard(position3[0], position3[1]) && !isOccupied(changeCords(position3[0], position3[1]))) {
             knightPosibleMoves.push(changeCords(position3[0], position3[1]));
-        }
-        if (insideBoard(position4[0], position4[1])) {
+        } else if (isOccupied(changeCords(position3[0], position3[1]))) {
+            knightEnemies.push(enemyDetector(changeCords(position3[0], position3[1]),changeCords(actualPosition[0], actualPosition[1])))
+        }    
+        if (insideBoard(position4[0], position4[1]) && !isOccupied(changeCords(position4[0], position4[1]))) {
             knightPosibleMoves.push(changeCords(position4[0], position4[1]));
+        } else if (isOccupied(changeCords(position4[0], position4[1]))) {
+            knightEnemies.push(enemyDetector(changeCords(position4[0], position4[1]),changeCords(actualPosition[0], actualPosition[1])))
         }
-        if (insideBoard(position5[0], position5[1])) {
+        if (insideBoard(position5[0], position5[1]) && !isOccupied(changeCords(position5[0], position5[1]))) {
             knightPosibleMoves.push(changeCords(position5[0], position5[1]));
+        } else if (isOccupied(changeCords(position5[0], position5[1]))) {
+            knightEnemies.push(enemyDetector(changeCords(position5[0], position5[1]),changeCords(actualPosition[0], actualPosition[1])))
         }
-        if (insideBoard(position6[0], position6[1])) {
+        if (insideBoard(position6[0], position6[1]) && !isOccupied(changeCords(position6[0], position6[1]))) {
             knightPosibleMoves.push(changeCords(position6[0], position6[1]));
+        } else if (isOccupied(changeCords(position6[0], position6[1]))) {
+            knightEnemies.push(enemyDetector(changeCords(position6[0], position6[1]),changeCords(actualPosition[0], actualPosition[1])))
         }
-        if (insideBoard(position7[0], position7[1])) {
+
+        if (insideBoard(position7[0], position7[1]) && !isOccupied(changeCords(position7[0], position7[1]))) {
             knightPosibleMoves.push(changeCords(position7[0], position7[1]));
+        } else if (isOccupied(changeCords(position7[0], position7[1]))) {
+            knightEnemies.push(enemyDetector(changeCords(position7[0], position7[1]),changeCords(actualPosition[0], actualPosition[1])))
         }
-        if (insideBoard(position8[0], position8[1])) {
+
+        if (insideBoard(position8[0], position8[1]) && !isOccupied(changeCords(position8[0], position8[1]))) {
             knightPosibleMoves.push(changeCords(position8[0], position8[1]));
+        } else if (isOccupied(changeCords(position8[0], position8[1]))) {
+            knightEnemies.push(enemyDetector(changeCords(position8[0], position8[1]),changeCords(actualPosition[0], actualPosition[1])))
         }
     }
-    return knightPosibleMoves;
+    knightPossibilities = [...knightPosibleMoves, thereIsEnemy, ...knightEnemies]
+    console.dir(knightPossibilities, {depth: null})
+    return "";
 }
 
 function bishopMoves(position: position) {
     let actualPosition;
     let newPosition;
     let bishopPosibleMoves = [];
+    let bishopEnemies = []
 
     if(Board[position[0]][position[1]]) {
         actualPosition = cords(position[0], position[1]);
@@ -372,6 +354,7 @@ function bishopMoves(position: position) {
             newPosition = [actualPosition[0] + i, actualPosition[1] + i];
             if (!insideBoard(newPosition[0], newPosition[1])) break;
             if (isOccupied(changeCords(newPosition[0], newPosition[1]))) {
+                bishopEnemies.push(enemyDetector(changeCords(newPosition[0], newPosition[1]), changeCords(actualPosition[0], actualPosition[1])))
                 break;
             } else {
                 bishopPosibleMoves.push(changeCords(newPosition[0], newPosition[1]));
@@ -382,6 +365,7 @@ function bishopMoves(position: position) {
             newPosition = [actualPosition[0] - i, actualPosition[1] + i];
             if (!insideBoard(newPosition[0], newPosition[1])) break;
             if (isOccupied(changeCords(newPosition[0], newPosition[1]))) {
+                bishopEnemies.push(enemyDetector(changeCords(newPosition[0], newPosition[1]), changeCords(actualPosition[0], actualPosition[1])))
                 break;
             } else {
                 bishopPosibleMoves.push(changeCords(newPosition[0], newPosition[1]));
@@ -392,6 +376,7 @@ function bishopMoves(position: position) {
             newPosition = [actualPosition[0] + i, actualPosition[1] - i];
             if (!insideBoard(newPosition[0],newPosition[1])) break;
             if (isOccupied(changeCords(newPosition[0], newPosition[1]))) {
+                bishopEnemies.push(enemyDetector(changeCords(newPosition[0], newPosition[1]), changeCords(actualPosition[0], actualPosition[1])))
                 break;
             } else {
                 bishopPosibleMoves.push(changeCords(newPosition[0], newPosition[1]));
@@ -402,13 +387,17 @@ function bishopMoves(position: position) {
             newPosition = [actualPosition[0] - i, actualPosition[1] - i];
             if (!insideBoard(newPosition[0], newPosition[1])) break;
             if (isOccupied(changeCords(newPosition[0], newPosition[1]))) {
+                bishopEnemies.push(enemyDetector(changeCords(newPosition[0], newPosition[1]), changeCords(actualPosition[0], actualPosition[1])))
                 break;
             } else {
                 bishopPosibleMoves.push(changeCords(newPosition[0], newPosition[1]));
             }
         }
     }
-    return bishopPosibleMoves;
+
+    let bishopPossibilities = []
+    bishopPossibilities = [...bishopPosibleMoves, thereIsEnemy, ...bishopEnemies]
+    return bishopPossibilities;
 }
 
 function kingMoves(position: position) {
@@ -462,7 +451,7 @@ function move(part: pieceType, position: position, color: color): string {
     }
 
     if(part === "rook") {
-        console.log("ROOK MOVES", rookMoves(position));
+        console.log(rookMoves(position));
     }
 
     if(part === "knight") {
@@ -486,12 +475,4 @@ function move(part: pieceType, position: position, color: color): string {
 return ""
 }
 
-console.log(move("pawn", ["B", 2], "white"))
-
-console.log(move("pawn", ["A", 7], "black"))
-console.log(move("knight", ["B", 1], "white"))
-console.log(move("rook", ["D", 1], "white"))
-console.log(move("bishop", ["C", 1], "white"))
-console.log(move("queen", ["D", 1], "white"))
-console.log(move("king", ["E", 1], "white"))
-
+console.log(move("rook", ["C", 4], "white"))
