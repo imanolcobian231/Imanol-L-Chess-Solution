@@ -44,7 +44,7 @@ for (let i = 0; i < 8; i++) {
 }
 
 // ROOKS
-Board["C"][4] = { part: "rook", color: "white" };
+Board["A"][1] = { part: "rook", color: "white" };
 Board["H"][1] = { part: "rook", color: "white" };
 Board["A"][8] = { part: "rook", color: "black" };
 Board["H"][8] = { part: "rook", color: "black" };
@@ -56,9 +56,9 @@ Board["B"][8] = { part: "knight", color: "black" };
 Board["G"][8] = { part: "knight", color: "black" };
 
 //BISHOPS
-Board["C"][8] = { part: "bishop", color: "black" };
+Board["D"][8] = { part: "bishop", color: "black" };
 Board["F"][8] = { part: "bishop", color: "black" };
-Board["C"][1] = { part: "bishop", color: "white" };
+Board["C"][4] = { part: "bishop", color: "white" };
 Board["F"][1] = { part: "bishop", color: "white" };
 
 // QUEENS
@@ -66,7 +66,7 @@ Board["D"][1] = { part: "queen", color: "white" };
 Board["D"][8] = { part: "queen", color: "black" };
 
 // KINGS
-Board["E"][1] = { part: "king", color: "white" };
+Board["E"][6] = { part: "king", color: "white" };
 Board["E"][8] = { part: "king", color: "black" };
 
 
@@ -397,12 +397,15 @@ function bishopMoves(position: position) {
 
     let bishopPossibilities = []
     bishopPossibilities = [...bishopPosibleMoves, thereIsEnemy, ...bishopEnemies]
-    return bishopPossibilities;
+    console.dir(bishopPossibilities, {depth: null})
+    return ""
 }
 
 function kingMoves(position: position) {
     let actualPosition;
     let kingPosibleMoves = [];
+    let kingEnemies = []
+    let kingPossibilities = []
 
     if(Board[position[0]][position[1]]) {
 
@@ -418,30 +421,49 @@ function kingMoves(position: position) {
 
         if (insideBoard(position1[0], position1[1]) && !isOccupied(changeCords(position1[0], position1[1]))) {
             kingPosibleMoves.push(changeCords(position1[0], position1[1]));
-        } 
+        } else if (isOccupied(changeCords(position1[0], position1[1]))) {
+            kingEnemies.push(enemyDetector(changeCords(position1[0], position1[1]),changeCords(actualPosition[0], actualPosition[1])))
+        }
         if (insideBoard(position2[0], position2[1]) && !isOccupied(changeCords(position2[0], position2[1]))) {
             kingPosibleMoves.push(changeCords(position2[0], position2[1]));
+        } else if (isOccupied(changeCords(position2[0], position2[1]))) {
+            kingEnemies.push(enemyDetector(changeCords(position2[0], position2[1]),changeCords(actualPosition[0], actualPosition[1])))
         }
         if (insideBoard(position3[0], position3[1]) && !isOccupied(changeCords(position3[0], position3[1]))) {
             kingPosibleMoves.push(changeCords(position3[0], position3[1]));
+        } else if (isOccupied(changeCords(position3[0], position3[1]))) {
+            kingEnemies.push(enemyDetector(changeCords(position3[0], position3[1]),changeCords(actualPosition[0], actualPosition[1])))
         }
         if (insideBoard(position4[0], position4[1]) && !isOccupied(changeCords(position4[0], position4[1]))) {
             kingPosibleMoves.push(changeCords(position4[0], position4[1]));
+        } else if (isOccupied(changeCords(position4[0], position4[1]))) {
+            kingEnemies.push(enemyDetector(changeCords(position4[0], position4[1]),changeCords(actualPosition[0], actualPosition[1])))
         }
         if (insideBoard(position5[0], position5[1]) && !isOccupied(changeCords(position5[0], position5[1]))) {
             kingPosibleMoves.push(changeCords(position5[0], position5[1]));
+        } else if (isOccupied(changeCords(position5[0], position5[1]))) {
+            kingEnemies.push(enemyDetector(changeCords(position5[0], position5[1]),changeCords(actualPosition[0], actualPosition[1])))
         }
         if (insideBoard(position6[0], position6[1]) && !isOccupied(changeCords(position6[0], position6[1]))) {
             kingPosibleMoves.push(changeCords(position6[0], position6[1]));
+        } else if (isOccupied(changeCords(position6[0], position6[1]))) {
+            kingEnemies.push(enemyDetector(changeCords(position6[0], position6[1]),changeCords(actualPosition[0], actualPosition[1])))
         }
         if (insideBoard(position7[0], position7[1]) && !isOccupied(changeCords(position7[0], position7[1]))) {
             kingPosibleMoves.push(changeCords(position7[0], position7[1]));
+        } else if (isOccupied(changeCords(position7[0], position7[1]))) {
+            kingEnemies.push(enemyDetector(changeCords(position7[0], position7[1]),changeCords(actualPosition[0], actualPosition[1])))
         }
         if (insideBoard(position8[0], position8[1]) && !isOccupied(changeCords(position8[0], position8[1]))) {
             kingPosibleMoves.push(changeCords(position8[0], position8[1]));
+        } else if (isOccupied(changeCords(position8[0], position8[1]))) {
+            kingEnemies.push(enemyDetector(changeCords(position8[0], position8[1]),changeCords(actualPosition[0], actualPosition[1])))
         }
     }
-    return kingPosibleMoves;
+
+    kingPossibilities = [...kingPosibleMoves, thereIsEnemy,...kingEnemies]
+    console.dir(kingPossibilities, {depth: null})
+    return ""
 }
 
 
@@ -455,24 +477,25 @@ function move(part: pieceType, position: position, color: color): string {
     }
 
     if(part === "knight") {
-        console.log("KNIGHT MOVES", knightMoves(position));
+        console.log(knightMoves(position));
     }
 
     if(part === "bishop") {
-        console.log("BISHOP MOVES", bishopMoves(position));
+        console.log(bishopMoves(position));
     }
 
     if(part === "queen") {
         let queenPosibleMoves = []
         queenPosibleMoves.push(rookMoves(position));
         queenPosibleMoves.push(bishopMoves(position));
-        console.log("QUEEN MOVES", queenPosibleMoves);
+        console.log(queenPosibleMoves);
     }
 
     if(part === "king") {
-        console.log("KING MOVES", kingMoves(position));
+        console.log(kingMoves(position));
     }
 return ""
 }
 
-console.log(move("rook", ["C", 4], "white"))
+console.log(move("king", ["E", 6], "white"))
+console.log(move("bishop", ["C", 4], "white"))
