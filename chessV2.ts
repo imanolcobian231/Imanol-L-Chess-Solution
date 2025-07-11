@@ -9,6 +9,11 @@ type boardType = {
     }     
 };
 
+interface enemyBoard {
+    piece: Piece
+    position: position
+}
+
 type pieceType = "pawn" | "rook" | "knight" | "bishop" | "queen" | "king";
 type color = "white" | "black";
 type letter = "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H";
@@ -87,35 +92,53 @@ function movePart(position: position, newPosition: position): void {
     Board[position[0]][position[1]] = null
 }
 
-function pawnsEat(position: position): void {
+function pawnsEat(position: position): Array<enemyBoard> {
     let actualPosition = cords(position[0], position[1]);
     let isWhite = false
     let isBlack = false
+    let enemy = []
+
     if(Board[position[0]][position[1]]?.color === "white"){
         isWhite = true
     } else {
         isBlack = true
     }
     //Pawns eat for white pawns
-    let pieceBL = Board[actualPosition[0]- 1][actualPosition[1] + 1] as Piece;
-    let pieceBR = Board[actualPosition[0]+ 1][actualPosition[1] + 1] as Piece;
-    if (pieceBL != null && pieceBL.color === "black" && isWhite && insideBoard(actualPosition[0]-1, actualPosition[1]+1)) {
-        movePart(changeCords(actualPosition[0], actualPosition[1]), changeCords(actualPosition[0]-1, actualPosition[1]+1))
+
+    if(insideBoard(actualPosition[0]-1, actualPosition[1] + 1)) {
+        let enemyPosition = changeCords(actualPosition[0] - 1, actualPosition[1] + 1)
+        let pieceBL = Board[enemyPosition[0]][enemyPosition[1]] as Piece;
+        if (pieceBL != null && pieceBL.color === "black" && isWhite) {
+            enemy.push({position: enemyPosition, Piece: pieceBL })
+            movePart(changeCords(actualPosition[0], actualPosition[1]), changeCords(actualPosition[0]-1, actualPosition[1]+1))
+        }
     }
-    if (pieceBR != null && pieceBR.color === "black" && isWhite && insideBoard(actualPosition[0]+1, actualPosition[1]+1)) {
-        movePart(changeCords(actualPosition[0], actualPosition[1]), changeCords(actualPosition[0]+1, actualPosition[1]+1))
-    }
+
+    if(insideBoard(actualPosition[0]+1, actualPosition[1]+1)) {
+        let enemyPosition = changeCords(actualPosition[0] + 1, actualPosition[1] + 1)
+        let pieceBR = Board[enemyPosition[0]][enemyPosition[1]] as Piece;
+        if (pieceBR != null && pieceBR.color === "black" && isWhite) {
+            movePart(changeCords(actualPosition[0], actualPosition[1]), changeCords(actualPosition[0]+1, actualPosition[1]+1))
+        }
+    }    
 
     //Pawns eat for black pawns
-    let pieceWL = Board[actualPosition[0] - 1][actualPosition[1] - 1] as Piece
-    let pieceWR = Board[actualPosition[0] + 1][actualPosition[1] - 1] as Piece
-    if(pieceWL != null && pieceWL.color === "white" && isBlack && insideBoard(actualPosition[0]-1, actualPosition[1]-1)){
-        movePart(changeCords(actualPosition[0], actualPosition[1]), changeCords(actualPosition[0]-1, actualPosition[1]-1))
-    }
-    if(pieceWR != null && pieceWR.color === "white" && isBlack && insideBoard(actualPosition[0]+1, actualPosition[1]-1)){
-        movePart(changeCords(actualPosition[0], actualPosition[1]), changeCords(actualPosition[0]+1, actualPosition[1]-1))
+    if(insideBoard(actualPosition[0]-1, actualPosition[1]-1)) {
+        let enemyPosition = changeCords(actualPosition[0] - 1, actualPosition[1] - 1)
+        let pieceWL = Board[enemyPosition[0]][enemyPosition[1]] as Piece
+        if(pieceWL != null && pieceWL.color === "white" && isBlack){
+            movePart(changeCords(actualPosition[0], actualPosition[1]), changeCords(actualPosition[0]-1, actualPosition[1]-1))
+        }
     }
 
+    if(insideBoard(actualPosition[0] + 1, actualPosition[1]-1)){
+        let enemyPosition = changeCords(actualPosition[0] + 1, actualPosition[1] - 1)
+        let pieceWR = Board[enemyPosition[0]][enemyPosition[1]] as Piece
+        if(pieceWR != null && pieceWR.color === "white" && isBlack){
+            movePart(changeCords(actualPosition[0], actualPosition[1]), changeCords(actualPosition[0]+1, actualPosition[1]-1))
+        }
+    }
+    return enemy
 }
 
 function pawnsMoves(position: position): Array<position> {
