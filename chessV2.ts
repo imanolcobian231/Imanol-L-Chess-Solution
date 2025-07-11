@@ -87,6 +87,37 @@ function movePart(position: position, newPosition: position): void {
     Board[position[0]][position[1]] = null
 }
 
+function pawnsEat(position: position): void {
+    let actualPosition = cords(position[0], position[1]);
+    let isWhite = false
+    let isBlack = false
+    if(Board[position[0]][position[1]]?.color === "white"){
+        isWhite = true
+    } else {
+        isBlack = true
+    }
+    //Pawns eat for white pawns
+    let pieceBL = Board[actualPosition[0]- 1][actualPosition[1] + 1] as Piece;
+    let pieceBR = Board[actualPosition[0]+ 1][actualPosition[1] + 1] as Piece;
+    if (pieceBL != null && pieceBL.color === "black" && isWhite && insideBoard(actualPosition[0]-1, actualPosition[1]+1)) {
+        movePart(changeCords(actualPosition[0], actualPosition[1]), changeCords(actualPosition[0]-1, actualPosition[1]+1))
+    }
+    if (pieceBR != null && pieceBR.color === "black" && isWhite && insideBoard(actualPosition[0]+1, actualPosition[1]+1)) {
+        movePart(changeCords(actualPosition[0], actualPosition[1]), changeCords(actualPosition[0]+1, actualPosition[1]+1))
+    }
+
+    //Pawns eat for black pawns
+    let pieceWL = Board[actualPosition[0] - 1][actualPosition[1] - 1] as Piece
+    let pieceWR = Board[actualPosition[0] + 1][actualPosition[1] - 1] as Piece
+    if(pieceWL != null && pieceWL.color === "white" && isBlack && insideBoard(actualPosition[0]-1, actualPosition[1]-1)){
+        movePart(changeCords(actualPosition[0], actualPosition[1]), changeCords(actualPosition[0]-1, actualPosition[1]-1))
+    }
+    if(pieceWR != null && pieceWR.color === "white" && isBlack && insideBoard(actualPosition[0]+1, actualPosition[1]-1)){
+        movePart(changeCords(actualPosition[0], actualPosition[1]), changeCords(actualPosition[0]+1, actualPosition[1]-1))
+    }
+
+}
+
 function pawnsMoves(position: position): Array<position> {
     let actualPosition: [number, number];
     let newPosition: [number, number];
