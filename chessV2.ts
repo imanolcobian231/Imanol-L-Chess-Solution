@@ -14,6 +14,8 @@ interface enemyBoard {
     position: position
 }
 
+
+
 type pieceType = "pawn" | "rook" | "knight" | "bishop" | "queen" | "king";
 type color = "white" | "black";
 type letter = "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H";
@@ -22,6 +24,7 @@ type position = [letter, rank];
 
 let Board: boardType = {};
 let letters = ["A","B","C","D","E","F","G","H"];
+let thereIsEnemy = ""
 
 for (let i = 0; i < letters.length; i++) {
     let lett: string = letters[i]
@@ -62,7 +65,7 @@ Board["F"][1] = { part: "bishop", color: "white" };
 
 // QUEENS
 Board["D"][1] = { part: "queen", color: "white" };
-Board["D"][8] = { part: "queen", color: "black" };
+Board["C"][3] = { part: "queen", color: "black" };
 
 // KINGS
 Board["E"][1] = { part: "king", color: "white" };
@@ -103,14 +106,14 @@ function pawnsEat(position: position): Array<enemyBoard> {
     } else {
         isBlack = true
     }
-    //Pawns eat for white pawns
 
+    //Pawns eat for white pawns
     if(insideBoard(actualPosition[0]-1, actualPosition[1] + 1)) {
         let enemyPosition = changeCords(actualPosition[0] - 1, actualPosition[1] + 1)
         let pieceBL = Board[enemyPosition[0]][enemyPosition[1]] as Piece;
         if (pieceBL != null && pieceBL.color === "black" && isWhite) {
-            enemy.push({position: enemyPosition, Piece: pieceBL })
-            movePart(changeCords(actualPosition[0], actualPosition[1]), changeCords(actualPosition[0]-1, actualPosition[1]+1))
+            enemy.push({position: enemyPosition, piece: pieceBL })
+            thereIsEnemy = "FICHAS DISPONIBLES PARA COMER"
         }
     }
 
@@ -118,7 +121,8 @@ function pawnsEat(position: position): Array<enemyBoard> {
         let enemyPosition = changeCords(actualPosition[0] + 1, actualPosition[1] + 1)
         let pieceBR = Board[enemyPosition[0]][enemyPosition[1]] as Piece;
         if (pieceBR != null && pieceBR.color === "black" && isWhite) {
-            movePart(changeCords(actualPosition[0], actualPosition[1]), changeCords(actualPosition[0]+1, actualPosition[1]+1))
+            enemy.push({position: enemyPosition, piece: pieceBR })
+            thereIsEnemy = "FICHAS DISPONIBLES PARA COMER"
         }
     }    
 
@@ -127,7 +131,8 @@ function pawnsEat(position: position): Array<enemyBoard> {
         let enemyPosition = changeCords(actualPosition[0] - 1, actualPosition[1] - 1)
         let pieceWL = Board[enemyPosition[0]][enemyPosition[1]] as Piece
         if(pieceWL != null && pieceWL.color === "white" && isBlack){
-            movePart(changeCords(actualPosition[0], actualPosition[1]), changeCords(actualPosition[0]-1, actualPosition[1]-1))
+            thereIsEnemy = "FICHAS DISPONIBLES PARA COMER"
+            enemy.push({position: enemyPosition, piece: pieceWL })
         }
     }
 
@@ -135,13 +140,15 @@ function pawnsEat(position: position): Array<enemyBoard> {
         let enemyPosition = changeCords(actualPosition[0] + 1, actualPosition[1] - 1)
         let pieceWR = Board[enemyPosition[0]][enemyPosition[1]] as Piece
         if(pieceWR != null && pieceWR.color === "white" && isBlack){
-            movePart(changeCords(actualPosition[0], actualPosition[1]), changeCords(actualPosition[0]+1, actualPosition[1]-1))
+            thereIsEnemy = "FICHAS DISPONIBLES PARA COMER"
+            enemy.push({position: enemyPosition, piece: pieceWR })
         }
+
     }
     return enemy
 }
 
-function pawnsMoves(position: position): Array<position> {
+function pawnsMoves(position: position): string {
     let actualPosition: [number, number];
     let newPosition: [number, number];
     let especialPosition: [number, number];
@@ -154,24 +161,28 @@ function pawnsMoves(position: position): Array<position> {
 
         if (piece.color == "black") {
             newPosition = [actualPosition[0], actualPosition[1] - 1];
-            if (actualPosition[1] == 7) {
+            if (position[1] == 7) {
                 especialPosition = [actualPosition[0], actualPosition[1] - 2];
+                pawnsPosibleMoves.push(changeCords(especialPosition[0], especialPosition[1]));
+                
             }
         } else {
         newPosition = [actualPosition[0], actualPosition[1] + 1];
         }
         if (!isOccupied(changeCords(newPosition[0], newPosition[1]))) {
             pawnsPosibleMoves.push(changeCords(newPosition[0], newPosition[1]));
-            movePart(changeCords(actualPosition[0],actualPosition[1]), changeCords(newPosition[0], newPosition[1]));
         } 
 
         if (position[1] == 2){
             especialPosition = [actualPosition[0], actualPosition[1] + 2];
             pawnsPosibleMoves.push(changeCords(especialPosition[0], especialPosition[1]));
         }
-    return pawnsPosibleMoves;
+    
+    let enemyPositions = pawnsEat(position)
+    let pawnPossibilities = [...pawnsPosibleMoves,thereIsEnemy,...enemyPositions]
+    console.log("MOVIMIENTOS DISPONIBLES", pawnPossibilities)
     }
-    return pawnsPosibleMoves;
+    return ""
 }
 
 function rookMoves(position: position) {
@@ -368,7 +379,7 @@ function kingMoves(position: position) {
 
 function move(part: pieceType, position: position, color: color): string {
     if(part === "pawn") {
-        console.log("PAWN MOVES", pawnsMoves(position));
+        console.log(pawnsMoves(position));
     }
 
     if(part === "rook") {
@@ -396,16 +407,12 @@ function move(part: pieceType, position: position, color: color): string {
 return ""
 }
 
-console.log(move("pawn", ["A", 2], "white"))
-console.log(move("pawn", ["A", 3], "white"))
-console.log(move("pawn", ["A", 4], "white"))
-console.log(move("pawn", ["A", 5], "white"))
 console.log(move("pawn", ["B", 2], "white"))
-console.log(move("pawn", ["E", 2], "white"))
-console.log(move("pawn", ["F", 2], "white"))
-console.log(move("pawn", ["D", 2], "white"))
-console.log(move("rook", ["A", 1], "white"))
+/*
+console.log(move("pawn", ["A", 7], "black"))
 console.log(move("knight", ["B", 1], "white"))
+console.log(move("rook", ["A", 1], "white"))
 console.log(move("bishop", ["C", 1], "white"))
-console.log(move("king", ["E", 1], "white"))
 console.log(move("queen", ["D", 1], "white"))
+console.log(move("king", ["E", 1], "white"))
+*/
