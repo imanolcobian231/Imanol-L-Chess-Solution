@@ -65,7 +65,7 @@ Board["F"][1] = { part: "bishop", color: "white" };
 
 // QUEENS
 Board["D"][1] = { part: "queen", color: "white" };
-Board["C"][3] = { part: "queen", color: "black" };
+Board["D"][8] = { part: "queen", color: "black" };
 
 // KINGS
 Board["E"][1] = { part: "king", color: "white" };
@@ -149,6 +149,7 @@ function pawnsEat(position: position): Array<enemyBoard> {
 }
 
 function pawnsMoves(position: position): string {
+    thereIsEnemy = ""
     let actualPosition: [number, number];
     let newPosition: [number, number];
     let especialPosition: [number, number];
@@ -188,7 +189,17 @@ function pawnsMoves(position: position): string {
 function rookMoves(position: position) {
     let actualPosition;
     let newPosition;
+    let isWhite
+    let isBlack
     let rookPosibleMoves = [];
+    let blackEnemyPositions = []
+    let whiteEnemyPositions = []
+
+    if(Board[position[0]][position[1]]?.color === "white"){
+        isWhite = true
+    } else {
+        isBlack = true
+    }
 
     if(Board[position[0]][position[1]]) {
         actualPosition = cords(position[0], position[1]);
@@ -197,6 +208,16 @@ function rookMoves(position: position) {
         for (let i = actualPosition[1] + 1; i < 8; i++) {
             newPosition = [actualPosition[0], i];
             if (isOccupied(changeCords(newPosition[0], newPosition[1]))) {
+                let enemyPosition = changeCords(newPosition[0], newPosition[1])
+                let enemy = Board[enemyPosition[0]][enemyPosition[1]]as Piece
+
+                if(enemy != null && enemy.color === "black" && isWhite ) {
+                    thereIsEnemy = "FICHAS DISPONIBLES PARA COMER"
+                    blackEnemyPositions.push({position: enemyPosition, piece: enemy })
+                } else if (enemy != null && enemy.color === "white" && isBlack ) {
+                    thereIsEnemy = "FICHAS DISPONIBLES PARA COMER"
+                    whiteEnemyPositions.push({position: enemyPosition, piece: enemy })
+                }
                 break;
             } else {
                 rookPosibleMoves.push(changeCords(newPosition[0], newPosition[1]));
@@ -207,6 +228,16 @@ function rookMoves(position: position) {
         for (let i = actualPosition[1] - 1;i >= 0; i--) {
             newPosition = [actualPosition[0], i];
             if (isOccupied(changeCords(newPosition[0], newPosition[1]))) {
+                let enemyPosition = changeCords(newPosition[0], newPosition[1])
+                let enemy = Board[enemyPosition[0]][enemyPosition[1]]as Piece
+
+                if(enemy != null && enemy.color === "black" && isWhite ) {
+                    thereIsEnemy = "FICHAS DISPONIBLES PARA COMER"
+                    blackEnemyPositions.push({position: enemyPosition, piece: enemy })
+                } else if (enemy != null && enemy.color === "white" && isBlack ) {
+                    thereIsEnemy = "FICHAS DISPONIBLES PARA COMER"
+                    whiteEnemyPositions.push({position: enemyPosition, piece: enemy })
+                }
                 break;
             } else {
                 rookPosibleMoves.push(changeCords(newPosition[0], newPosition[1]));
@@ -217,6 +248,16 @@ function rookMoves(position: position) {
         for (let i = actualPosition[0] + 1;i < 8; i++) {
             newPosition = [i, actualPosition[1]];
             if (isOccupied(changeCords(newPosition[0], newPosition[1]))) {
+                let enemyPosition = changeCords(newPosition[0], newPosition[1])
+                let enemy = Board[enemyPosition[0]][enemyPosition[1]]as Piece
+
+                if(enemy != null && enemy.color === "black" && isWhite ) {
+                    thereIsEnemy = "FICHAS DISPONIBLES PARA COMER"
+                    blackEnemyPositions.push({position: enemyPosition, piece: enemy })
+                } else if (enemy != null && enemy.color === "white" && isBlack ) {
+                    thereIsEnemy = "FICHAS DISPONIBLES PARA COMER"
+                    whiteEnemyPositions.push({position: enemyPosition, piece: enemy })
+                }
                 break;
             } else {
                 rookPosibleMoves.push(changeCords(newPosition[0], newPosition[1]));
@@ -227,6 +268,16 @@ function rookMoves(position: position) {
         for (let i = actualPosition[0] - 1;i >= 0; i--) {
             newPosition = [i, actualPosition[1]];
             if (isOccupied(changeCords(newPosition[0], newPosition[1]))) {
+                let enemyPosition = changeCords(newPosition[0], newPosition[1])
+                let enemy = Board[enemyPosition[0]][enemyPosition[1]]as Piece
+
+                if(enemy != null && enemy.color === "black" && isWhite ) {
+                    thereIsEnemy = "FICHAS DISPONIBLES PARA COMER"
+                    blackEnemyPositions.push({position: enemyPosition, piece: enemy })
+                } else if (enemy != null && enemy.color === "white" && isBlack ) {
+                    thereIsEnemy = "FICHAS DISPONIBLES PARA COMER"
+                    whiteEnemyPositions.push({position: enemyPosition, piece: enemy })
+                }
                 break;
             } else {
                 rookPosibleMoves.push(changeCords(newPosition[0], newPosition[1]));
@@ -234,7 +285,13 @@ function rookMoves(position: position) {
         }
     }
    
-    return rookPosibleMoves;
+    let rookPossibilities = []
+    if(isWhite) {
+        rookPossibilities = [...rookPosibleMoves, thereIsEnemy, ...blackEnemyPositions]    
+    } else {
+        rookPossibilities = [...rookPosibleMoves, thereIsEnemy, ...whiteEnemyPositions]
+    }
+    return rookPossibilities;
  
 }
 
@@ -256,6 +313,7 @@ function knightMoves(position: position) {
 
         if (insideBoard(position1[0], position1[1])) {
             knightPosibleMoves.push(changeCords(position1[0], position1[1]));
+            
         }
         if (insideBoard(position2[0], position2[1])) {
             knightPosibleMoves.push(changeCords(position2[0], position2[1]));
@@ -408,11 +466,11 @@ return ""
 }
 
 console.log(move("pawn", ["B", 2], "white"))
-/*
+
 console.log(move("pawn", ["A", 7], "black"))
 console.log(move("knight", ["B", 1], "white"))
-console.log(move("rook", ["A", 1], "white"))
+console.log(move("rook", ["D", 1], "white"))
 console.log(move("bishop", ["C", 1], "white"))
 console.log(move("queen", ["D", 1], "white"))
 console.log(move("king", ["E", 1], "white"))
-*/
+
