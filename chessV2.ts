@@ -148,6 +148,7 @@ function pawnsEat(position: position): Array<enemyBoard> {
     return enemy
 }
 
+
 function pawnsMoves(position: position): string {
     thereIsEnemy = ""
     let actualPosition: [number, number];
@@ -298,6 +299,15 @@ function rookMoves(position: position) {
 function knightMoves(position: position) {
     let actualPosition;
     let knightPosibleMoves = [];
+    let isWhite
+    let isBlack
+    let blackEnemyPositions = []
+    let whiteEnemyPositions = []
+    if(Board[position[0]][position[1]]?.color === "white"){
+        isWhite = true
+    } else {
+        isBlack = true
+    }
 
     if(Board[position[0]][position[1]]) {
 
@@ -313,7 +323,18 @@ function knightMoves(position: position) {
 
         if (insideBoard(position1[0], position1[1])) {
             knightPosibleMoves.push(changeCords(position1[0], position1[1]));
-            
+        } else if (isOccupied(changeCords(position1[0], position1[1]))) {
+
+                let enemyPosition = changeCords(position1[0], position1[1])
+                let enemy = Board[enemyPosition[0]][enemyPosition[1]]as Piece
+
+                if(enemy != null && enemy.color === "black" && isWhite ) {
+                    thereIsEnemy = "FICHAS DISPONIBLES PARA COMER"
+                    blackEnemyPositions.push({position: enemyPosition, piece: enemy })
+                } else if (enemy != null && enemy.color === "white" && isBlack ) {
+                    thereIsEnemy = "FICHAS DISPONIBLES PARA COMER"
+                    whiteEnemyPositions.push({position: enemyPosition, piece: enemy })
+                }
         }
         if (insideBoard(position2[0], position2[1])) {
             knightPosibleMoves.push(changeCords(position2[0], position2[1]));
