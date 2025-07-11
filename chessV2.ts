@@ -49,9 +49,11 @@ Board["G"][1] = { part: "knight", color: "white" };
 Board["B"][8] = { part: "knight", color: "black" };
 Board["G"][8] = { part: "knight", color: "black" };
 
-//BISHOPS* Board["F"][1] = { part: "bishop", color: "white" };
+//BISHOPS
 Board["C"][8] = { part: "bishop", color: "black" };
 Board["F"][8] = { part: "bishop", color: "black" };
+Board["C"][1] = { part: "bishop", color: "white" };
+Board["F"][1] = { part: "bishop", color: "white" };
 
 // QUEENS
 Board["D"][1] = { part: "queen", color: "white" };
@@ -88,20 +90,32 @@ function movePart(position: position, newPosition: position): void {
 function pawnsMoves(position: position): Array<position> {
     let actualPosition: [number, number];
     let newPosition: [number, number];
+    let especialPosition: [number, number];
     let pawnsPosibleMoves: Array<position> = [];
 
     if (Board[position[0]][position[1]]) {
         actualPosition = cords(position[0], position[1]);
+        let piece = Board[position[0]][position[1]] as Piece;
+
+
+        if (piece.color == "black") {
+            newPosition = [actualPosition[0], actualPosition[1] - 1];
+            if (actualPosition[1] == 7) {
+                especialPosition = [actualPosition[0], actualPosition[1] - 2];
+            }
+        } else {
         newPosition = [actualPosition[0], actualPosition[1] + 1];
+        }
         if (!isOccupied(changeCords(newPosition[0], newPosition[1]))) {
             pawnsPosibleMoves.push(changeCords(newPosition[0], newPosition[1]));
             movePart(changeCords(actualPosition[0],actualPosition[1]), changeCords(newPosition[0], newPosition[1]));
         } 
 
         if (position[1] == 2){
-            let especialPosition = [actualPosition[0], actualPosition[1] + 2];
+            especialPosition = [actualPosition[0], actualPosition[1] + 2];
             pawnsPosibleMoves.push(changeCords(especialPosition[0], especialPosition[1]));
         }
+    return pawnsPosibleMoves;
     }
     return pawnsPosibleMoves;
 }
@@ -341,4 +355,3 @@ console.log(move("knight", ["B", 1], "white"))
 console.log(move("bishop", ["C", 1], "white"))
 console.log(move("king", ["E", 1], "white"))
 console.log(move("queen", ["D", 1], "white"))
-console.log(Board)
