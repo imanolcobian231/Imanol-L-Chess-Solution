@@ -50,7 +50,7 @@ Board["A"][8] = { part: "rook", color: "black" };
 Board["H"][8] = { part: "rook", color: "black" };
 
 // KNIGHTS
-Board["B"][3] = { part: "knight", color: "white" };
+Board["B"][1] = { part: "knight", color: "white" };
 Board["G"][1] = { part: "knight", color: "white"}
 Board["B"][8] = { part: "knight", color: "black" };
 Board["G"][8] = { part: "knight", color: "black" };
@@ -58,7 +58,7 @@ Board["G"][8] = { part: "knight", color: "black" };
 //BISHOPS
 Board["D"][8] = { part: "bishop", color: "black" };
 Board["F"][8] = { part: "bishop", color: "black" };
-Board["D"][5] = { part: "bishop", color: "white" };
+Board["D"][1] = { part: "bishop", color: "white" };
 Board["F"][1] = { part: "bishop", color: "white" };
 
 // QUEENS
@@ -67,7 +67,7 @@ Board["D"][8] = { part: "queen", color: "black" };
 
 // KINGS
 Board["E"][1] = { part: "king", color: "white" };
-Board["D"][4] = { part: "king", color: "black" };
+Board["E"][8] = { part: "king", color: "black" };
 
 
 function isOccupied(position: position): boolean {
@@ -182,6 +182,7 @@ function pawnsMoves(position: position): string {
     let newPosition: [number, number];
     let especialPosition: [number, number];
     let pawnsPosibleMoves: Array<position> = [];
+    let cut = false
 
     if (Board[position[0]][position[1]]) {
         actualPosition = cords(position[0], position[1]);
@@ -190,23 +191,33 @@ function pawnsMoves(position: position): string {
 
         if (piece.color == "black") {
             newPosition = [actualPosition[0], actualPosition[1] - 1];
-            if (position[1] == 7) {
+            if (isOccupied(changeCords(newPosition[0], newPosition[1]))) {
+            cut = true
+            } else {
+                pawnsPosibleMoves.push(changeCords(newPosition[0], newPosition[1]));
+            }
+            if (position[1] == 7 && !cut) {
                 especialPosition = [actualPosition[0], actualPosition[1] - 2];
+                if(!isOccupied(changeCords(especialPosition[0], especialPosition[1]))) {
                 pawnsPosibleMoves.push(changeCords(especialPosition[0], especialPosition[1]));
-                
+                }       
             }
         } else {
         newPosition = [actualPosition[0], actualPosition[1] + 1];
+        
+        if (isOccupied(changeCords(newPosition[0], newPosition[1]))) {
+            cut = true
+        } else {
+             pawnsPosibleMoves.push(changeCords(newPosition[0], newPosition[1]));
         }
-        if (!isOccupied(changeCords(newPosition[0], newPosition[1]))) {
-            pawnsPosibleMoves.push(changeCords(newPosition[0], newPosition[1]));
-        } 
 
-        if (position[1] == 2){
+        if (position[1] == 2 && !cut){
             especialPosition = [actualPosition[0], actualPosition[1] + 2];
-            pawnsPosibleMoves.push(changeCords(especialPosition[0], especialPosition[1]));
+            if(!isOccupied(changeCords(especialPosition[0], especialPosition[1]))) {
+                pawnsPosibleMoves.push(changeCords(especialPosition[0], especialPosition[1]));
+            }
         }
-    
+    }
     let enemyPositions = pawnsEat(position);
     let pawnPossibilities = [...pawnsPosibleMoves,thereIsEnemy,...enemyPositions];
     console.log("MOVIMIENTOS DISPONIBLES", pawnPossibilities);
@@ -492,7 +503,6 @@ function move(part: pieceType, position: position, color: color): string {
 return ""
 }
 
-console.log(move("bishop", ["D", 5], "white"))
-console.log(move("king", ["D", 4], "black"))
-console.log(move("knight", ["G", 1], "white"))
-console.log(move("knight", ["B", 3], "white"))
+console.log(move("pawn", ["A", 2], "white"))
+console.log(move("pawn", ["B", 2], "white"))
+console.log(move("pawn", ["A", 7], "black"))
