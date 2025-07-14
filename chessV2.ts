@@ -50,15 +50,15 @@ Board["A"][8] = { part: "rook", color: "black" };
 Board["H"][8] = { part: "rook", color: "black" };
 
 // KNIGHTS
-Board["B"][1] = { part: "knight", color: "white" };
-Board["G"][1] = { part: "knight", color: "white" };
+Board["B"][3] = { part: "knight", color: "white" };
+Board["G"][1] = { part: "knight", color: "white"}
 Board["B"][8] = { part: "knight", color: "black" };
 Board["G"][8] = { part: "knight", color: "black" };
 
 //BISHOPS
 Board["D"][8] = { part: "bishop", color: "black" };
 Board["F"][8] = { part: "bishop", color: "black" };
-Board["D"][1] = { part: "bishop", color: "white" };
+Board["D"][5] = { part: "bishop", color: "white" };
 Board["F"][1] = { part: "bishop", color: "white" };
 
 // QUEENS
@@ -67,7 +67,7 @@ Board["D"][8] = { part: "queen", color: "black" };
 
 // KINGS
 Board["E"][1] = { part: "king", color: "white" };
-Board["E"][8] = { part: "king", color: "black" };
+Board["D"][4] = { part: "king", color: "black" };
 
 
 function isOccupied(position: position): boolean {
@@ -149,7 +149,7 @@ function pawnsEat(position: position): Array<enemyBoard> {
 function enemyDetector(position: position, actualPosition: position):Array<enemyBoard> {
     let newPosition = cords(position[0], position[1]);
     let enemyPosition = changeCords(newPosition[0], newPosition[1]);
-    let enemy = Board[enemyPosition[0]][enemyPosition[1]]as Piece;
+    let enemy = Board[enemyPosition[0]][enemyPosition[1]] as Piece;
     let isWhite;
     let isBlack;
     let blackEnemyPositions = []
@@ -230,7 +230,7 @@ function rookMoves(position: position) {
                 rookEnemies.push(enemyDetector(changeCords(newPosition[0], newPosition[1]),changeCords(actualPosition[0], actualPosition[1])));
                 break;
             } else {
-                rookPosibleMoves.push(changeCords(newPosition[0], newPosition[1]),changeCords(actualPosition[0], actualPosition[1]));
+                rookPosibleMoves.push(changeCords(newPosition[0], newPosition[1]));
             }
         }
 
@@ -294,42 +294,42 @@ function knightMoves(position: position) {
 
         if (insideBoard(position1[0], position1[1]) && !isOccupied(changeCords(position1[0], position1[1]))) {
             knightPosibleMoves.push(changeCords(position1[0], position1[1]));
-        } else if (isOccupied(changeCords(position1[0], position1[1]))) {
+        } else if (insideBoard(position1[0], position1[1]) && isOccupied(changeCords(position1[0], position1[1]))) {
             knightEnemies.push(enemyDetector(changeCords(position1[0], position1[1]),changeCords(actualPosition[0], actualPosition[1])));
         }
         if (insideBoard(position2[0], position2[1]) && !isOccupied(changeCords(position2[0], position2[1]))) {
             knightPosibleMoves.push(changeCords(position2[0], position2[1]));
-        } else if (isOccupied(changeCords(position2[0], position2[1]))) {
+        } else if (insideBoard(position2[0], position2[1]) && isOccupied(changeCords(position2[0], position2[1]))) {
             knightEnemies.push(enemyDetector(changeCords(position2[0], position2[1]),changeCords(actualPosition[0], actualPosition[1])));
         }
         if (insideBoard(position3[0], position3[1]) && !isOccupied(changeCords(position3[0], position3[1]))) {
             knightPosibleMoves.push(changeCords(position3[0], position3[1]));
-        } else if (isOccupied(changeCords(position3[0], position3[1]))) {
+        } else if (insideBoard(position3[0], position3[1]) && isOccupied(changeCords(position3[0], position3[1]))) {
             knightEnemies.push(enemyDetector(changeCords(position3[0], position3[1]),changeCords(actualPosition[0], actualPosition[1])));
         }    
         if (insideBoard(position4[0], position4[1]) && !isOccupied(changeCords(position4[0], position4[1]))) {
             knightPosibleMoves.push(changeCords(position4[0], position4[1]));
-        } else if (isOccupied(changeCords(position4[0], position4[1]))) {
+        } else if (insideBoard(position4[0], position4[1]) && isOccupied(changeCords(position4[0], position4[1]))) {
             knightEnemies.push(enemyDetector(changeCords(position4[0], position4[1]),changeCords(actualPosition[0], actualPosition[1])));
         }
         if (insideBoard(position5[0], position5[1]) && !isOccupied(changeCords(position5[0], position5[1]))) {
             knightPosibleMoves.push(changeCords(position5[0], position5[1]));
-        } else if (isOccupied(changeCords(position5[0], position5[1]))) {
+        } else if (insideBoard(position5[0], position5[1]) && isOccupied(changeCords(position5[0], position5[1]))) {
             knightEnemies.push(enemyDetector(changeCords(position5[0], position5[1]),changeCords(actualPosition[0], actualPosition[1])));
         }
         if (insideBoard(position6[0], position6[1]) && !isOccupied(changeCords(position6[0], position6[1]))) {
             knightPosibleMoves.push(changeCords(position6[0], position6[1]));
-        } else if (isOccupied(changeCords(position6[0], position6[1]))) {
+        } else if (insideBoard(position4[0], position4[1]) && isOccupied(changeCords(position6[0], position6[1]))) {
             knightEnemies.push(enemyDetector(changeCords(position6[0], position6[1]),changeCords(actualPosition[0], actualPosition[1])));
         }
         if (insideBoard(position7[0], position7[1]) && !isOccupied(changeCords(position7[0], position7[1]))) {
             knightPosibleMoves.push(changeCords(position7[0], position7[1]));
-        } else if (isOccupied(changeCords(position7[0], position7[1]))) {
+        } else if (insideBoard(position7[0], position7[1]) && isOccupied(changeCords(position7[0], position7[1]))) {
             knightEnemies.push(enemyDetector(changeCords(position7[0], position7[1]),changeCords(actualPosition[0], actualPosition[1])));
         }
         if (insideBoard(position8[0], position8[1]) && !isOccupied(changeCords(position8[0], position8[1]))) {
             knightPosibleMoves.push(changeCords(position8[0], position8[1]));
-        } else if (isOccupied(changeCords(position8[0], position8[1]))) {
+        } else if (insideBoard(position8[0], position8[1]) && isOccupied(changeCords(position8[0], position8[1]))) {
             knightEnemies.push(enemyDetector(changeCords(position8[0], position8[1]),changeCords(actualPosition[0], actualPosition[1])));
         }
     }
@@ -492,5 +492,7 @@ function move(part: pieceType, position: position, color: color): string {
 return ""
 }
 
-console.log(move("king", ["E", 6], "white"));
-console.log(move("bishop", ["C", 4], "white"));
+console.log(move("bishop", ["D", 5], "white"))
+console.log(move("king", ["D", 4], "black"))
+console.log(move("knight", ["G", 1], "white"))
+console.log(move("knight", ["B", 3], "white"))
